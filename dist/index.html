@@ -7,10 +7,81 @@
   <title>Webpack Starter Kit</title>
 </head>
 <body>
-  <img src="./images/turing-logo.png" alt="turing logo">
-  
+  <nav class="topNav">
+    <img class="" src="./images/turing-logo.png" alt="turing logo">
+    <section>
+      <input type="button" value="raw data" class="rawDataButton">
+    </section>
+    <section class="currentUser">
+      <h3></h3>
+      <a></a>
+    </section>
+  </nav>
+  <section class="welcomeContainer">
+    <section class="logIn">
+      <h1>Welcome</h1>
+      <div class="inputContainer">
+        <label for="userNameField">Enter User Name</label>
+        <input type="text" id="userNameField" value="25">
+          <div class="userNames"></div>
+        <label for="passwordField">Enter Password</label>
+        <input type="text" id="passwordField" value="travel">
+        <input type="button" class="loginButton"value="Login">
+      </div>
+    </section>
+  </section>
+    <section class="clientDashboard">
+      <article class="myTrips collapsible"><p>My trips</p><p>&#x257F</p></article>
+      <div id="myTrips" class="tripList collapsed">
+        <div class="table">
+          <table>
+            <tbody id="dataDump" class="tripData">
+              <tr>
+                <th class="tableHeader">Destination</th><th>Trip Date</th><th>Image</th>
+              </tr>
+            </tbody>
+          </table>
+          </div>
+      </div>
+      <article class="totalSpent collapsible"><p>Total spent</p><p>&#x257F</p></article>
+      <div id="totalSpent" class="spentList collapsed"></div>
+    </section>
+    <section>make a booking</section>
+    <div class="hidden" id="tableContainer">
+      <div class="table">
+      <table>Traveler Data
+        <tbody id="dataDump" class="travelerData">
+          <tr>
+            <th class="tableHeader">Traveler ID</th><th>Traveler Name</th><th>Traveler Type</th>
+          </tr>
+        </tbody>
+      </table>
+      </div>
+      <div class="table">
+      <table>Trip Data
+        <tbody id="dataDump" class="tripData">
+          <tr>
+            <th class="tableHeader">Trip ID</th><th>User ID</th><th>Destination ID</th><th>No. of Travelers</th><th>Trip Date</th>
+          </tr>
+        </tbody>
+      </table>
+      </div>
+      <div class="table">
+      <table>Destination Data
+        <tbody id="dataDump" class="destinationData">
+          <tr>
+            <th class="tableHeader">Destination ID</th><th>Destination Name</th><th>Daily lodging ($)</th><th>Flight cost/person/day($)</th><th>Destination Image</th>
+          </tr>
+        </tbody>
+      </table>
+      </div>
+    </div>
+    <dialog class="tripModal modal">
+      <nav>Your trip to <p class="tripName"></p> on <p class="tripDate"></p><button value="cancel" formmethod="dialog">Close</button></nav>
+      <section class="devBox">trip</section>
+      <section class="devBox">date</section>
+    </dialog>
   <!-- Do not include the scripts.js or class files here - it is done by the webpack server -->
   <script src="bundle.js"></script>
-
 </body>
 </html>
