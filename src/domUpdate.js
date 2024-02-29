@@ -6,18 +6,6 @@ import * as evt from "./eventListeners"
 function updateDOM(data, type) {
 }
 
-function travelers(data) {
-
-}
-
-function trips(data) {
-
-}
-
-function destinations(data) {
- 
-}
-
 function displayRawData() {
     vrbl.rawDataContainer.classList.toggle('hidden')
 }
@@ -25,6 +13,7 @@ function displayRawData() {
 function userLogin() {
     if(vrbl.userName && vrbl.password.value === 'travel'){
         vrbl.loginPanel.classList.toggle('hidden')
+        vrbl.dashboard.classList.toggle('hidden')
         updateUserInfo(vrbl.userName.value)
     } else {
         alert('credentials incorrect')
@@ -58,22 +47,13 @@ function selectedUser(e) {
 function updateUserInfo(user) {
     vrbl.currUserName.innerText = script.storeCurrentUser(user)
     displayTrips(script.updateUserTrips(user))
-    script.updateUserSpent(user)
+    displayTripCost(script.updateUserTrips(user))
 }
 
 
 function toggleCollapsible(e) {
-    if(e.target.classList.contains('collapsible')){
-        let rotationAngle = e.target.querySelector('p:nth-child(2)').style.transform
         document.querySelector(`#${e.target.classList[0]}`).classList.toggle('collapsed')
-        
-        if (rotationAngle === 'rotate(90deg)') {
-            e.target.querySelector('p:nth-child(2)').style.transform = 'rotate(180deg)';
-        } else {
-            e.target.querySelector('p:nth-child(2)').style.transform = 'rotate(90deg)'
-            rotationAngle = 90;
-        }
-    }
+        e.target.classList.toggle('expanded')
 }
 
 
@@ -114,6 +94,49 @@ function displayTrips(data) {
 
         vrbl.tripData.appendChild(newTripElement);
     });
+}
+
+function displayTripCost(data) {
+    let totalCostSum = 0;
+
+    data.forEach((trip) => {
+        const newLink = document.createElement('p');
+        newLink.textContent = `${trip.dest} \u21d7`;
+        newLink.value = trip.dest;
+        newLink.date = trip.date;
+        newLink.addEventListener('click', (e) => {
+            showTripDetails(e.target.value, e.target.date);
+        });
+
+        const newCell = document.createElement('th');
+        newCell.appendChild(newLink);
+
+        const dateCell = document.createElement('th');
+        dateCell.textContent = trip.date;
+
+        const flightCostCell = document.createElement('th');
+        flightCostCell.textContent = trip.flightCost;
+
+        const lodgingCostCell = document.createElement('th');
+        lodgingCostCell.textContent = trip.lodgingCost;
+
+        const totalCost = (trip.flightCost + trip.lodgingCost * 1.10).toFixed(2); 
+        totalCostSum += parseFloat(totalCost);
+
+        const totalCostCell = document.createElement('th');
+        totalCostCell.textContent = totalCost;
+
+        const newTripElement = document.createElement('tr');
+        newTripElement.appendChild(newCell);
+        newTripElement.appendChild(dateCell);
+        newTripElement.appendChild(flightCostCell);
+        newTripElement.appendChild(lodgingCostCell);
+        newTripElement.appendChild(totalCostCell);
+        
+        vrbl.costData.appendChild(newTripElement);
+    });
+
+    vrbl.totalCost.innerText = `Total spent on travel $${totalCostSum.toFixed(2)}`; 
 }
 
 function showTripDetails(trip, date) {

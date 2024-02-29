@@ -220,6 +220,13 @@ body {
     }
   }
 
+  .expanded{
+    p:nth-child(2){
+      margin-right: 10px;
+      transform: rotate(90deg);
+    }
+  }
+
   .collapsed {
     width: 98%;
     height: 0px !important;

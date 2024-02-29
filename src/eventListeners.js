@@ -24,10 +24,10 @@ function setUpListeners() {
         
     })
 
-    vrbl.dashboard.addEventListener('click', (e) => {
-
+    document.querySelector(".clientDashboard").addEventListener('click', (e) => {
+        if(e.target.classList.contains('totalSpent') || e.target.classList.contains('myTrips')){
         dom.toggleCollapsible(e)
-
+        }
     })
 
     const tripModal = document.querySelector('.tripModal');

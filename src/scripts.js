@@ -11,7 +11,7 @@ import './css/styles.css';
 
 // An example of how you tell webpack to use an image (also need to link to it in the index.html)
 import './images/turing-logo.png'
-
+let cost = []
 let promiseState
 
 promiseState = {
@@ -62,6 +62,10 @@ Promise.all(promises)
     function updateUserTrips(user) {
         const filterTrips = promiseState.trips.reduce((acc, trip) => {
             if(trip.userID == user){
+                const flightCost = getTripCost(trip.destinationID, trip.travelers, 'flight');
+                const lodgingCost = getTripCost(trip.destinationID, trip.duration, 'lodging');
+                const totalCost = flightCost + lodgingCost
+
                 acc.push({
                     ['tripID']: trip.id,
                     ['dest']: getDestination(trip.destinationID, 'name'),
@@ -70,7 +74,10 @@ Promise.all(promises)
                     ['duration']: `${trip.duration} Day(s)`,
                     ['status']: trip.status,
                     ['photo']: getDestination(trip.destinationID, 'photo'),
-                    ['suggActivities']: promiseState.currentUser.travelerType
+                    ['suggActivities']: promiseState.currentUser.travelerType,
+                    ['flightCost']: flightCost,
+                    ['lodgingCost']: lodgingCost,
+                    ['totalCost']: totalCost
                 })
             }
             return acc
@@ -80,15 +87,9 @@ Promise.all(promises)
         return filterTrips
     }
 
-    function updateUserSpent(user) {
-        const filterCost = promiseState.trips.reduce((acc, trip) => {
-            if(trip.userID == user){
-                acc.push(trip)
-            }
-            return acc
-        }, [])
-        
-        promiseState.currentUserSpend = filterCost
+    function getTripCost(dest, mult, type) {
+       const costAmount = getDestination(dest, type)
+       return costAmount * mult
     }
 
     function getUserInfo(user) {
@@ -107,6 +108,12 @@ Promise.all(promises)
 
             case 'name': return destination[0].destination
             break;
+
+            case 'flight': return destination[0].estimatedFlightCostPerPerson
+            break;
+
+            case 'lodging': return destination[0].estimatedLodgingCostPerDay
+            break;
         }
     }
 
@@ -116,7 +123,6 @@ Promise.all(promises)
 export {
     promiseState,
     updateUserTrips,
-    updateUserSpent,
     storeCurrentUser,
 }
 

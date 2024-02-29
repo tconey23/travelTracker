@@ -30,9 +30,9 @@
       </div>
     </section>
   </section>
-    <section class="clientDashboard">
-      <article class="myTrips collapsible"><p>My trips</p><p>&#x257F</p></article>
-      <div id="myTrips" class="tripList collapsed">
+    <section class="clientDashboard hidden">
+      <article class="myTrips collapsible expanded"><p>My trips</p><p>&#x257F</p></article>
+      <div id="myTrips" class="tripList">
         <div class="table">
           <table>
             <tbody id="dataDump" class="tripData">
@@ -44,7 +44,18 @@
           </div>
       </div>
       <article class="totalSpent collapsible"><p>Total spent</p><p>&#x257F</p></article>
-      <div id="totalSpent" class="spentList collapsed"></div>
+      <div id="totalSpent" class="spentList collapsed">
+        <div class="table">
+          <table>
+            <tbody id="dataDump" class="costData">
+              <tr>
+                <th class="tableHeader">Destination</th><th>Trip Date</th><th>Flight Cost</th><th>Lodging Cost</th><th>Total Cost</th>
+              </tr>
+            </tbody>
+          </table>
+          <h3 class="totalCost"></h3>
+        </div>
+      </div>
     </section>
     <section>make a booking</section>
     <div class="hidden" id="tableContainer">

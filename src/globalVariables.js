@@ -1,10 +1,11 @@
-export{ tripName, tripDate, tripModal, tripLinks, dashboard, tripList, spentList, totalSpent, myTrips, currUserName, password, travelers, userList, userName, loginPanel, loginButton, hidden, travelerData, tripData, destinationData, rawData, rawDataContainer }
+export{ totalCost, costData, tripName, tripDate, tripModal, tripLinks, dashboard, tripList, spentList, totalSpent, myTrips, currUserName, password, travelers, userList, userName, loginPanel, loginButton, hidden, travelerData, tripData, destinationData, rawData, rawDataContainer }
 import * as script from "./scripts"
 
 const rawDataContainer = document.querySelector('#tableContainer')
 const hidden = document.querySelectorAll('.hidden')
 const travelerData = document.querySelector('.travelerData')
 const tripData = document.querySelector('.tripData')
+const costData = document.querySelector('.costData')
 const destinationData = document.querySelector('.destinationData')
 const rawData = document.querySelector('.rawDataButton')
 const loginButton = document.querySelector('.loginButton')
@@ -22,4 +23,5 @@ const tripLinks = document.querySelectorAll('#dataDump > tr > th > a')
 const tripModal = document.querySelector('.tripModal')
 const tripDate = document.querySelector('.tripDate')
 const tripName = document.querySelector('.tripName')
+const totalCost = document.querySelector('.totalCost')
 const travelers = {}
