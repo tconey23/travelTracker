@@ -55,7 +55,6 @@ Promise.all(promises)
           let key = Object.keys(res)
             promiseState[key] = res[key]
         })
-        console.log(promiseState)
 
     }
 
@@ -82,7 +81,6 @@ Promise.all(promises)
             }
             return acc
         }, [])
-        console.log(promiseState)
         promiseState.currentUserTrips = filterTrips
         return filterTrips
     }
@@ -93,9 +91,7 @@ Promise.all(promises)
     }
 
     function getUserInfo(user) {
-        console.log(user)
         const currentUser = promiseState.travelers.find((trav) => trav.id == user)
-        console.log(currentUser)
         return currentUser
     }
 

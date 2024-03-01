@@ -173,6 +173,11 @@ body {
           }
         }
       }
+
+      .modalInfo {
+        width: 98%;
+        height: 50;
+      }
     
       section {
         width: 50%;

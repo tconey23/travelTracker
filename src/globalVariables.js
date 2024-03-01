@@ -1,4 +1,4 @@
-export{ totalCost, costData, tripName, tripDate, tripModal, tripLinks, dashboard, tripList, spentList, totalSpent, myTrips, currUserName, password, travelers, userList, userName, loginPanel, loginButton, hidden, travelerData, tripData, destinationData, rawData, rawDataContainer }
+export{ pendingCost, approvedCost, totalCost, costData, tripName, tripDate, tripModal, tripLinks, dashboard, tripList, spentList, totalSpent, myTrips, currUserName, password, travelers, userList, userName, loginPanel, loginButton, hidden, travelerData, tripData, destinationData, rawData, rawDataContainer }
 import * as script from "./scripts"
 
 const rawDataContainer = document.querySelector('#tableContainer')
@@ -18,10 +18,12 @@ const myTrips = document.querySelector('.myTrips')
 const totalSpent = document.querySelector('.totalSpent')
 const dashboard = document.querySelector(".clientDashboard")
 const tripList = document.querySelector(".tripList")
-const spentList = document.querySelector(".tripList")
+const spentList = document.querySelector(".spentList")
 const tripLinks = document.querySelectorAll('#dataDump > tr > th > a')
 const tripModal = document.querySelector('.tripModal')
 const tripDate = document.querySelector('.tripDate')
 const tripName = document.querySelector('.tripName')
 const totalCost = document.querySelector('.totalCost')
+const approvedCost = document.querySelector('#totalSpent > h3.totalCost.approved')
+const pendingCost = document.querySelector('#totalSpent > h3.totalCost.pending')
 const travelers = {}

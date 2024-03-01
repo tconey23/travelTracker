@@ -47,14 +47,17 @@
       <div id="totalSpent" class="spentList collapsed">
         <div class="table">
           <table>
-            <tbody id="dataDump" class="costData">
+            <tbody id="dataDump" class="costData approved"> 
               <tr>
-                <th class="tableHeader">Destination</th><th>Trip Date</th><th>Flight Cost</th><th>Lodging Cost</th><th>Total Cost</th>
+                <th class="tableHeader">Destination</th><th>Trip Date</th><th>Flight Cost</th><th>Lodging Cost</th><th title="Includes 10% Agent Fee">Total Cost<sup>*</sup></th><th>Status</th>
               </tr>
             </tbody>
+            <tbody id="dataDump" class="costData pending"> 
+            </tbody>
           </table>
-          <h3 class="totalCost"></h3>
         </div>
+        <h3 class="totalCost approved"></h3>
+        <h3 class="totalCost pending"></h3>
       </div>
     </section>
     <section>make a booking</section>
@@ -89,8 +92,10 @@
     </div>
     <dialog class="tripModal modal">
       <nav>Your trip to <p class="tripName"></p> on <p class="tripDate"></p><button value="cancel" formmethod="dialog">Close</button></nav>
-      <section class="devBox">trip</section>
-      <section class="devBox">date</section>
+      <section class="tripInfo modalInfo">
+
+      </section>
+      <section class="costInfo modalInfo"></section>
     </dialog>
   <!-- Do not include the scripts.js or class files here - it is done by the webpack server -->
   <script src="bundle.js"></script>

@@ -52,11 +52,13 @@ function updateUserInfo(user) {
 
 
 function toggleCollapsible(e) {
-        document.querySelector(`#${e.target.classList[0]}`).classList.toggle('collapsed')
+    if(e.target.classList.contains('totalSpent')){
+        vrbl.spentList.classList.toggle('collapsed')
+    } else{
+        vrbl.tripList.classList.toggle('collapsed')
+    }
         e.target.classList.toggle('expanded')
 }
-
-
 
 // function displayTrips(data) {
 //     console.log(data)
@@ -82,6 +84,9 @@ function displayTrips(data) {
         const dateCell = document.createElement('th');
         dateCell.textContent = trip.date;
 
+        const statusCell = document.createElement('th')
+        statusCell.textContent = trip.status;
+
         const imgCell = document.createElement('th');
         const img = document.createElement('img');
         img.src = trip.photo;
@@ -90,57 +95,92 @@ function displayTrips(data) {
         const newTripElement = document.createElement('tr');
         newTripElement.appendChild(newCell);
         newTripElement.appendChild(dateCell);
+        newTripElement.appendChild(statusCell);
         newTripElement.appendChild(imgCell);
 
         vrbl.tripData.appendChild(newTripElement);
     });
 }
 
-function displayTripCost(data) {
-    let totalCostSum = 0;
+let approvedSum
+let pendingSum
 
-    data.forEach((trip) => {
-        const newLink = document.createElement('p');
-        newLink.textContent = `${trip.dest} \u21d7`;
-        newLink.value = trip.dest;
-        newLink.date = trip.date;
-        newLink.addEventListener('click', (e) => {
-            showTripDetails(e.target.value, e.target.date);
-        });
-
-        const newCell = document.createElement('th');
-        newCell.appendChild(newLink);
-
-        const dateCell = document.createElement('th');
-        dateCell.textContent = trip.date;
-
-        const flightCostCell = document.createElement('th');
-        flightCostCell.textContent = trip.flightCost;
-
-        const lodgingCostCell = document.createElement('th');
-        lodgingCostCell.textContent = trip.lodgingCost;
-
-        const totalCost = (trip.flightCost + trip.lodgingCost * 1.10).toFixed(2); 
-        totalCostSum += parseFloat(totalCost);
-
-        const totalCostCell = document.createElement('th');
-        totalCostCell.textContent = totalCost;
-
-        const newTripElement = document.createElement('tr');
-        newTripElement.appendChild(newCell);
-        newTripElement.appendChild(dateCell);
-        newTripElement.appendChild(flightCostCell);
-        newTripElement.appendChild(lodgingCostCell);
-        newTripElement.appendChild(totalCostCell);
-        
-        vrbl.costData.appendChild(newTripElement);
+function separateCostByType(type, trip) {
+    let inputTable = document.querySelector(`.${type}`);
+    const newLink = document.createElement('p');
+    newLink.textContent = `${trip.dest} \u21d7`;
+    newLink.value = trip.dest;
+    newLink.date = trip.date;
+    newLink.addEventListener('click', (e) => {
+        showTripDetails(e.target.value, e.target.date);
     });
 
-    vrbl.totalCost.innerText = `Total spent on travel $${totalCostSum.toFixed(2)}`; 
+    const newCell = document.createElement('th');
+    newCell.appendChild(newLink);
+
+    const dateCell = document.createElement('th');
+    dateCell.textContent = trip.date;
+
+    const flightCostCell = document.createElement('th');
+    flightCostCell.textContent = trip.flightCost;
+
+    const lodgingCostCell = document.createElement('th');
+    lodgingCostCell.textContent = trip.lodgingCost;
+
+    const statusCell = document.createElement('th')
+    statusCell.textContent = trip.status;
+
+    const totalCost = (trip.flightCost + trip.lodgingCost * 1.10).toFixed(2);
+
+    const updatedCosts = splitCost(type, pendingSum, approvedSum, totalCost);
+    approvedSum = updatedCosts[1]; // Update approvedSum with the returned value
+    pendingSum = updatedCosts[0]; // Update pendingSum with the returned value
+
+    const totalCostCell = document.createElement('th');
+    totalCostCell.textContent = totalCost;
+
+    const newTripElement = document.createElement('tr');
+    newTripElement.appendChild(newCell);
+    newTripElement.appendChild(dateCell);
+    newTripElement.appendChild(flightCostCell);
+    newTripElement.appendChild(lodgingCostCell);
+    newTripElement.appendChild(totalCostCell);
+    newTripElement.appendChild(statusCell);
+
+    inputTable.appendChild(newTripElement);
+
+    vrbl.approvedCost.innerText = `Total approved cost ${approvedSum.toFixed(2)}`;
+    vrbl.pendingCost.innerText = `Total pending cost ${pendingSum.toFixed(2)}`;
+}
+
+function splitCost(type, currPending, currApproved, addAmount) {
+    let approvedSum = currApproved;
+    let pendingSum = currPending;
+
+    switch (type) {
+        case 'approved':
+            approvedSum += parseFloat(addAmount);
+            break;
+
+        case 'pending':
+            pendingSum += parseFloat(addAmount);
+            break;
+    }
+
+
+    return [pendingSum, approvedSum];
+}
+
+function displayTripCost(data) {
+pendingSum = 0
+approvedSum = 0
+
+    data.forEach((trip) => {
+        separateCostByType(trip.status, trip)
+    })
 }
 
 function showTripDetails(trip, date) {
-    console.log(trip, date)
     vrbl.tripName.innerText = trip
     vrbl.tripDate.innerText = date
     vrbl.tripModal.showModal()
