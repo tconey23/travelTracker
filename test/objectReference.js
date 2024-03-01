@@ -2771,3 +2771,33 @@ const data = {
         }
     ]
 }
+
+const thisData = {
+['tripID']: trip.id,
+['dest']: getDestination(trip.destinationID, 'name'),
+['date']: trip.date,
+['numTravelers']: trip.travelers,
+['duration']: `${trip.duration} Day(s)`,
+['status']: trip.status,
+['photo']: getDestination(trip.destinationID, 'photo'),
+['suggActivities']: promiseState.currentUser.travelerType,
+['flightCost']: flightCost,
+['lodgingCost']: lodgingCost,
+['totalCost']: totalCost
+}
+
+const thisTrip = {
+    {
+        "tripID": 159,
+        "dest": "Santo Domingo, Dominican Republic",
+        "date": "2020/07/24",
+        "numTravelers": 6,
+        "duration": "17 Day(s)",
+        "status": "approved",
+        "photo": "https://images.unsplash.com/photo-1510541383520-4daa77a666cf?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1782&q=80",
+        "suggActivities": "relaxer",
+        "flightCost": 480,
+        "lodgingCost": 6800,
+        "totalCost": 7280
+    }
+}

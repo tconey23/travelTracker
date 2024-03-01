@@ -14,6 +14,7 @@ function userLogin() {
     if(vrbl.userName && vrbl.password.value === 'travel'){
         vrbl.loginPanel.classList.toggle('hidden')
         vrbl.dashboard.classList.toggle('hidden')
+        vrbl.clientInterface.classList.toggle('hidden')
         updateUserInfo(vrbl.userName.value)
     } else {
         alert('credentials incorrect')
@@ -74,8 +75,9 @@ function displayTrips(data) {
         newLink.textContent = `${trip.dest} \u21d7`;
         newLink.value = trip.dest
         newLink.date = trip.date
+        newLink.id = trip.tripID
         newLink.addEventListener('click', (e) => {
-            showTripDetails(e.target.value, e.target.date)
+            showTripDetails(e.target.value, e.target.date, e.target.id, vrbl.tripInfo)
         });
 
         const newCell = document.createElement('th');
@@ -87,16 +89,16 @@ function displayTrips(data) {
         const statusCell = document.createElement('th')
         statusCell.textContent = trip.status;
 
-        const imgCell = document.createElement('th');
-        const img = document.createElement('img');
-        img.src = trip.photo;
-        imgCell.appendChild(img);
+        // const imgCell = document.createElement('th');
+        // const img = document.createElement('img');
+        // img.src = trip.photo;
+        // imgCell.appendChild(img);
 
         const newTripElement = document.createElement('tr');
         newTripElement.appendChild(newCell);
         newTripElement.appendChild(dateCell);
         newTripElement.appendChild(statusCell);
-        newTripElement.appendChild(imgCell);
+        // newTripElement.appendChild(imgCell);
 
         vrbl.tripData.appendChild(newTripElement);
     });
@@ -109,10 +111,11 @@ function separateCostByType(type, trip) {
     let inputTable = document.querySelector(`.${type}`);
     const newLink = document.createElement('p');
     newLink.textContent = `${trip.dest} \u21d7`;
-    newLink.value = trip.dest;
-    newLink.date = trip.date;
+    newLink.value = trip.dest
+    newLink.date = trip.date
+    newLink.id = trip.tripID
     newLink.addEventListener('click', (e) => {
-        showTripDetails(e.target.value, e.target.date);
+        showTripDetails(e.target.value, e.target.date, e.target.id, vrbl.costInfo)
     });
 
     const newCell = document.createElement('th');
@@ -180,10 +183,26 @@ approvedSum = 0
     })
 }
 
-function showTripDetails(trip, date) {
+function showTripDetails(trip, date, tripID, contName) {
     vrbl.tripName.innerText = trip
     vrbl.tripDate.innerText = date
+    findTripDetails(tripID, contName)
     vrbl.tripModal.showModal()
+}
+
+function findTripDetails(tripID, contName) {
+  let userTrips = script.promiseState.currentUserTrips
+    const thisTrip = userTrips.find((trip) => trip.tripID == tripID)
+    console.log(tripID)
+    Object.values(vrbl.tripModal.querySelectorAll('p')).forEach((elem) => {
+        console.log(elem.value)
+        elem.innerText=""
+        Object.entries(thisTrip).forEach((item) => {
+            if(item[0]==elem.id){
+                elem.innerText += `${item[1]}`
+            }
+        })
+    })
 }
 
 

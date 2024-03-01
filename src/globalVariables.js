@@ -1,4 +1,4 @@
-export{ pendingCost, approvedCost, totalCost, costData, tripName, tripDate, tripModal, tripLinks, dashboard, tripList, spentList, totalSpent, myTrips, currUserName, password, travelers, userList, userName, loginPanel, loginButton, hidden, travelerData, tripData, destinationData, rawData, rawDataContainer }
+export{ clientInterface, costInfo, tripInfo, pendingCost, approvedCost, totalCost, costData, tripName, tripDate, tripModal, tripLinks, dashboard, tripList, spentList, totalSpent, myTrips, currUserName, password, travelers, userList, userName, loginPanel, loginButton, hidden, travelerData, tripData, destinationData, rawData, rawDataContainer }
 import * as script from "./scripts"
 
 const rawDataContainer = document.querySelector('#tableContainer')
@@ -26,4 +26,7 @@ const tripName = document.querySelector('.tripName')
 const totalCost = document.querySelector('.totalCost')
 const approvedCost = document.querySelector('#totalSpent > h3.totalCost.approved')
 const pendingCost = document.querySelector('#totalSpent > h3.totalCost.pending')
+const tripInfo = document.querySelector('.tripInfo')
+const costInfo = document.querySelector('.costInfo')
+const clientInterface = document.querySelector('.clientInteraction')
 const travelers = {}

@@ -4,6 +4,9 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Hedvig+Letters+Serif:opsz@12..24&display=swap" rel="stylesheet">
   <title>Webpack Starter Kit</title>
 </head>
 <body>
@@ -30,14 +33,15 @@
       </div>
     </section>
   </section>
+  <div class="dashboardContainer clientMain">
     <section class="clientDashboard hidden">
       <article class="myTrips collapsible expanded"><p>My trips</p><p>&#x257F</p></article>
       <div id="myTrips" class="tripList">
         <div class="table">
           <table>
             <tbody id="dataDump" class="tripData">
-              <tr>
-                <th class="tableHeader">Destination</th><th>Trip Date</th><th>Image</th>
+              <tr class="tableHeader">
+                <th>Destination</th><th>Trip Date</th><th>Status</th>
               </tr>
             </tbody>
           </table>
@@ -48,8 +52,8 @@
         <div class="table">
           <table>
             <tbody id="dataDump" class="costData approved"> 
-              <tr>
-                <th class="tableHeader">Destination</th><th>Trip Date</th><th>Flight Cost</th><th>Lodging Cost</th><th title="Includes 10% Agent Fee">Total Cost<sup>*</sup></th><th>Status</th>
+              <tr class="tableHeader">
+                <th>Destination</th><th>Trip Date</th><th>Flight Cost</th><th>Lodging Cost</th><th title="Includes 10% Agent Fee">Total Cost<sup>*</sup></th><th>Status</th>
               </tr>
             </tbody>
             <tbody id="dataDump" class="costData pending"> 
@@ -60,42 +64,57 @@
         <h3 class="totalCost pending"></h3>
       </div>
     </section>
-    <section>make a booking</section>
-    <div class="hidden" id="tableContainer">
-      <div class="table">
-      <table>Traveler Data
-        <tbody id="dataDump" class="travelerData">
-          <tr>
-            <th class="tableHeader">Traveler ID</th><th>Traveler Name</th><th>Traveler Type</th>
-          </tr>
-        </tbody>
-      </table>
-      </div>
-      <div class="table">
-      <table>Trip Data
-        <tbody id="dataDump" class="tripData">
-          <tr>
-            <th class="tableHeader">Trip ID</th><th>User ID</th><th>Destination ID</th><th>No. of Travelers</th><th>Trip Date</th>
-          </tr>
-        </tbody>
-      </table>
-      </div>
-      <div class="table">
-      <table>Destination Data
-        <tbody id="dataDump" class="destinationData">
-          <tr>
-            <th class="tableHeader">Destination ID</th><th>Destination Name</th><th>Daily lodging ($)</th><th>Flight cost/person/day($)</th><th>Destination Image</th>
-          </tr>
-        </tbody>
-      </table>
-      </div>
-    </div>
+  </div>
+  <div class="interfaceContainer clientMain">
+    <section class="clientInteraction hidden">
+    </section>
+  </div>
     <dialog class="tripModal modal">
-      <nav>Your trip to <p class="tripName"></p> on <p class="tripDate"></p><button value="cancel" formmethod="dialog">Close</button></nav>
+      <nav><div class="titleContainer">Your trip to <h4 class="tripName"></h4> on <h4 class="tripDate"></h4></div><div class="buttonContainer"><button value="cancel" formmethod="dialog">Close</button></div></nav>
       <section class="tripInfo modalInfo">
-
+        <table>
+          <tbody>
+            <tr>
+              <th>
+                <h3>Trip Id#:</h3><p value="" id="tripID"></p>
+              </th>
+            </tr>
+            <tr>
+              <th>
+                <h3>Destination:</h3><p value="" id="dest"></p>
+              </th>
+            </tr>
+            <tr>
+              <th>
+                <h3>Number of travelers:</h3><p value="" id="numTravelers"></p>
+              </th>
+            </tr>
+            <tr>
+              <th>
+                <h3>Trip Status:</h3><p value="" id="status"></p>
+              </th>
+            </tr>
+            <tr>
+              <th>
+                <h3>Flight Cost:</h3><p id="flightCost"></p>
+              </th>
+            </tr>
+            <tr>
+              <th>
+                <h3>Lodging Cost:</h3><p id="lodgingCost"></p>
+              </th>
+            </tr>
+            <tr>
+              <th>
+                <h3>Total Cost:</h3><p id="totalCost"></p>
+              </th>
+            </tr>
+          </tbody>
+        </table>
       </section>
-      <section class="costInfo modalInfo"></section>
+      <section>
+        <img src="">
+      </section>
     </dialog>
   <!-- Do not include the scripts.js or class files here - it is done by the webpack server -->
   <script src="bundle.js"></script>
