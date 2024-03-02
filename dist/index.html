@@ -1,122 +1,197 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Hedvig+Letters+Serif:opsz@12..24&display=swap" rel="stylesheet">
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <title>Webpack Starter Kit</title>
 </head>
+
 <body>
-  <nav class="topNav">
-    <img class="" src="./images/turing-logo.png" alt="turing logo">
-    <section>
-      <input type="button" value="raw data" class="rawDataButton">
-    </section>
-    <section class="currentUser">
-      <h3></h3>
-      <a></a>
-    </section>
-  </nav>
-  <section class="welcomeContainer">
-    <section class="logIn">
-      <h1>Welcome</h1>
-      <div class="inputContainer">
-        <label for="userNameField">Enter User Name</label>
-        <input type="text" id="userNameField" value="25">
-          <div class="userNames"></div>
-        <label for="passwordField">Enter Password</label>
-        <input type="text" id="passwordField" value="travel">
-        <input type="button" class="loginButton"value="Login">
-      </div>
-    </section>
-  </section>
-  <div class="dashboardContainer clientMain">
-    <section class="clientDashboard hidden">
-      <article class="myTrips collapsible expanded"><p>My trips</p><p>&#x257F</p></article>
-      <div id="myTrips" class="tripList">
-        <div class="table">
-          <table>
-            <tbody id="dataDump" class="tripData">
-              <tr class="tableHeader">
-                <th>Destination</th><th>Trip Date</th><th>Status</th>
-              </tr>
-            </tbody>
-          </table>
-          </div>
-      </div>
-      <article class="totalSpent collapsible"><p>Total spent</p><p>&#x257F</p></article>
-      <div id="totalSpent" class="spentList collapsed">
-        <div class="table">
-          <table>
-            <tbody id="dataDump" class="costData approved"> 
-              <tr class="tableHeader">
-                <th>Destination</th><th>Trip Date</th><th>Flight Cost</th><th>Lodging Cost</th><th title="Includes 10% Agent Fee">Total Cost<sup>*</sup></th><th>Status</th>
-              </tr>
-            </tbody>
-            <tbody id="dataDump" class="costData pending"> 
-            </tbody>
-          </table>
-        </div>
-        <h3 class="totalCost approved"></h3>
-        <h3 class="totalCost pending"></h3>
-      </div>
-    </section>
-  </div>
-  <div class="interfaceContainer clientMain">
-    <section class="clientInteraction hidden">
-    </section>
-  </div>
-    <dialog class="tripModal modal">
-      <nav><div class="titleContainer">Your trip to <h4 class="tripName"></h4> on <h4 class="tripDate"></h4></div><div class="buttonContainer"><button value="cancel" formmethod="dialog">Close</button></div></nav>
-      <section class="tripInfo modalInfo">
-        <table>
-          <tbody>
-            <tr>
-              <th>
-                <h3>Trip Id#:</h3><p value="" id="tripID"></p>
-              </th>
-            </tr>
-            <tr>
-              <th>
-                <h3>Destination:</h3><p value="" id="dest"></p>
-              </th>
-            </tr>
-            <tr>
-              <th>
-                <h3>Number of travelers:</h3><p value="" id="numTravelers"></p>
-              </th>
-            </tr>
-            <tr>
-              <th>
-                <h3>Trip Status:</h3><p value="" id="status"></p>
-              </th>
-            </tr>
-            <tr>
-              <th>
-                <h3>Flight Cost:</h3><p id="flightCost"></p>
-              </th>
-            </tr>
-            <tr>
-              <th>
-                <h3>Lodging Cost:</h3><p id="lodgingCost"></p>
-              </th>
-            </tr>
-            <tr>
-              <th>
-                <h3>Total Cost:</h3><p id="totalCost"></p>
-              </th>
-            </tr>
-          </tbody>
-        </table>
-      </section>
-      <section>
-        <img src="">
-      </section>
-    </dialog>
-  <!-- Do not include the scripts.js or class files here - it is done by the webpack server -->
-  <script src="bundle.js"></script>
+	<nav class="topNav"> <img class="" src="./images/turing-logo.png" alt="turing logo">
+		<section>
+			<input type="button" value="raw data" class="rawDataButton"> </section>
+		<section class="currentUser">
+			<h3></h3>
+			<a></a>
+		</section>
+	</nav>
+	<section class="welcomeContainer hidden">
+		<section class="logIn">
+			<h1>Welcome</h1>
+			<div class="inputContainer">
+				<label for="userNameField">Enter User Name</label>
+				<input type="text" id="userNameField" value="25">
+				<div class="userNames"></div>
+				<label for="passwordField">Enter Password</label>
+				<input type="text" id="passwordField" value="travel">
+				<input type="button" class="loginButton" value="Login"> </div>
+		</section>
+	</section>
+	<main class="dashboardContainer clientMain">
+		<section class="clientDashboard">
+			<article class="myTrips collapsible expanded">
+				<p>My trips</p>
+				<p>&#x257F</p>
+			</article>
+			<div id="myTrips" class="tripList">
+				<div class="table">
+					<table>
+						<tbody id="dataDump" class="tripData">
+							<tr class="tableHeader">
+								<th>Destination</th>
+								<th>Trip Date</th>
+								<th>Status</th>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<article class="totalSpent collapsible">
+				<p>Total spent</p>
+				<p>&#x257F</p>
+			</article>
+			<div id="totalSpent" class="spentList collapsed">
+				<div class="table">
+					<table>
+						<tbody id="dataDump" class="costData approved">
+							<tr class="tableHeader">
+								<th>Destination</th>
+								<th>Trip Date</th>
+								<th>Flight Cost</th>
+								<th>Lodging Cost</th>
+								<th title="Includes 10% Agent Fee">Total Cost<sup>*</sup></th>
+								<th>Status</th>
+							</tr>
+						</tbody>
+						<tbody id="dataDump" class="costData pending"> </tbody>
+					</table>
+				</div>
+				<h3 class="totalCost approved"></h3>
+				<h3 class="totalCost pending"></h3> </div>
+		</section>
+	</main>
+	<main class="interfaceContainer clientMain">
+		<section class="clientInteraction">
+			<header></header>
+			<main>
+				<aside>
+					<div>
+						<h3 class="bookTrip">Book your next trip!</h3></div>
+				</aside>
+				<section>
+          <form class="bookingForm">
+            <h3>Traveler Details</h3>
+            <label>Traveler ID*</label>
+            <span><input id="travelerID" type="text" class="" required><label for="travelerID"></label></span>
+            <label>Traveler Name*</label>
+            <span><input id="firstName" type="text" class="" placeholder="First Name" required><label for="firstName"></label></span>
+            <span><input id="lastName" type="text" class="" placeholder="Last Name" required><label for="lastName"></label></span>
+            <h3>Trip Details</h3>
+            <label>Destination*</label>
+            <span><input id="dest" type="search" required></span>
+            <span class="dateSpan"><label>Date of Departure*</label>
+            <input id="depDate" type="date" required>
+            <label>Date of Return*</label>
+            <input id="retDate" type="date" class="readOnly" required readonly disabled>
+            <input id="duration" class="hidden">
+            </span>
+            <p class="tripDur">Trip duration: </p>
+            <label>Number of travelers*</label>
+            <span><input class="range" id="numTravelers" type="number" min="1" max="10" value="1" step="1" list="travSelect" required><p class="travCount"></p></span>
+            <label>Include Lodging?*</label>
+            <input id="lodging" type="checkbox" required>
+            <input id="createReq" type="submit" value="Create Booking">
+            <input id="submit" class="hidden" type="submit">
+            <dialog class="error"><caption>Please complete the following fields before submission</caption></dialog>
+          </form>
+        </section>
+			</main>
+			<footer></footer>
+		</section>
+	</main>
+  <dialog class="destModal modal">
+    <header class="modalHeader">
+			<div class="titleContainer">
+				<h4>Select from the list of available destinations below</h4>
+			<div class="buttonContainer">
+				<button value="cancel" formmethod="dialog">Close</button>
+			</div>
+		</header>
+    <table>
+      <tbody class="destList">
+        <tr class="tableHeader">
+          <th><a id="city">City</a></th><th><a id="country">Country</a></th><th><a id="estimatedLodgingCostPerDay">Lodging Cost</a></th><th><a id="estimatedFlightCostPerPerson">Flight Cost</a></th><th>Photo</th>
+        </tr>
+      </tbody>
+    </table>
+          
+  </dialog>
+	<dialog class="tripModal modal">
+		<header class="modalHeader">
+			<div class="titleContainer">Your trip to
+				<h4 class="tripName"></h4> on
+				<h4 class="tripDate"></h4></div>
+			<div class="buttonContainer">
+				<button value="cancel" formmethod="dialog">Close</button>
+			</div>
+		</header>
+		<section class="tripInfo modalInfo">
+			<table>
+				<tbody>
+					<tr>
+						<th>
+							<h3>Trip Id#:</h3>
+							<p value="" id="tripID"></p>
+						</th>
+					</tr>
+					<tr>
+						<th>
+							<h3>Destination:</h3>
+							<p value="" id="dest"></p>
+						</th>
+					</tr>
+					<tr>
+						<th>
+							<h3>Number of travelers:</h3>
+							<p value="" id="numTravelers"></p>
+						</th>
+					</tr>
+					<tr>
+						<th>
+							<h3>Trip Status:</h3>
+							<p value="" id="status"></p>
+						</th>
+					</tr>
+					<tr>
+						<th>
+							<h3>Flight Cost:</h3>
+							<p id="flightCost"></p>
+						</th>
+					</tr>
+					<tr>
+						<th>
+							<h3>Lodging Cost:</h3>
+							<p id="lodgingCost"></p>
+						</th>
+					</tr>
+					<tr>
+						<th>
+							<h3>Total Cost:</h3>
+							<p id="totalCost"></p>
+						</th>
+					</tr>
+				</tbody>
+			</table>
+		</section>
+		<section> <img src=""> </section>
+	</dialog>
+  <div id='map'></div>
+	<!-- Do not include the scripts.js or class files here - it is done by the webpack server -->
+	<script src="bundle.js"></script>
 </body>
+
 </html>

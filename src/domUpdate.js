@@ -2,6 +2,9 @@
 import * as vrbl from "./globalVariables"
 import * as script from "./scripts"
 import * as evt from "./eventListeners"
+const { differenceInDays } = require('date-fns')
+// import * as map from "./map"
+
 
 function updateDOM(data, type) {
 }
@@ -64,7 +67,7 @@ function toggleCollapsible(e) {
 // function displayTrips(data) {
 //     console.log(data)
 //     data.forEach((trip) => {
-//         vrbl.tripData.innerHTML += `<th><a>${trip.dest} &#x21d7</a></th><th>${trip.date}</th><th><img src="${trip.photo}"></th>`
+//         vrbl.tripData.innerHTML += `<td><a>${trip.dest} &#x21d7</a></th><td>${trip.date}</th><td><img src="${trip.photo}"></th>`
 //     })
 //     evt.secondaryListeners('a')
 // }
@@ -77,19 +80,19 @@ function displayTrips(data) {
         newLink.date = trip.date
         newLink.id = trip.tripID
         newLink.addEventListener('click', (e) => {
-            showTripDetails(e.target.value, e.target.date, e.target.id, vrbl.tripInfo)
+            showTripDetails(e.target.value, e.target.date, e.target.id, vrbl.tripInfo, e)
         });
 
-        const newCell = document.createElement('th');
+        const newCell = document.createElement('td');
         newCell.appendChild(newLink);
 
-        const dateCell = document.createElement('th');
+        const dateCell = document.createElement('td');
         dateCell.textContent = trip.date;
 
-        const statusCell = document.createElement('th')
+        const statusCell = document.createElement('td')
         statusCell.textContent = trip.status;
 
-        // const imgCell = document.createElement('th');
+        // const imgCell = document.createElement('td');
         // const img = document.createElement('img');
         // img.src = trip.photo;
         // imgCell.appendChild(img);
@@ -115,22 +118,22 @@ function separateCostByType(type, trip) {
     newLink.date = trip.date
     newLink.id = trip.tripID
     newLink.addEventListener('click', (e) => {
-        showTripDetails(e.target.value, e.target.date, e.target.id, vrbl.costInfo)
+        showTripDetails(e.target.value, e.target.date, e.target.id, vrbl.costInfo,e)
     });
 
-    const newCell = document.createElement('th');
+    const newCell = document.createElement('td');
     newCell.appendChild(newLink);
 
-    const dateCell = document.createElement('th');
+    const dateCell = document.createElement('td');
     dateCell.textContent = trip.date;
 
-    const flightCostCell = document.createElement('th');
+    const flightCostCell = document.createElement('td');
     flightCostCell.textContent = trip.flightCost;
 
-    const lodgingCostCell = document.createElement('th');
+    const lodgingCostCell = document.createElement('td');
     lodgingCostCell.textContent = trip.lodgingCost;
 
-    const statusCell = document.createElement('th')
+    const statusCell = document.createElement('td')
     statusCell.textContent = trip.status;
 
     const totalCost = (trip.flightCost + trip.lodgingCost * 1.10).toFixed(2);
@@ -139,7 +142,7 @@ function separateCostByType(type, trip) {
     approvedSum = updatedCosts[1]; // Update approvedSum with the returned value
     pendingSum = updatedCosts[0]; // Update pendingSum with the returned value
 
-    const totalCostCell = document.createElement('th');
+    const totalCostCell = document.createElement('td');
     totalCostCell.textContent = totalCost;
 
     const newTripElement = document.createElement('tr');
@@ -183,7 +186,7 @@ approvedSum = 0
     })
 }
 
-function showTripDetails(trip, date, tripID, contName) {
+function showTripDetails(trip, date, tripID, contName, e) {
     vrbl.tripName.innerText = trip
     vrbl.tripDate.innerText = date
     findTripDetails(tripID, contName)
@@ -195,7 +198,6 @@ function findTripDetails(tripID, contName) {
     const thisTrip = userTrips.find((trip) => trip.tripID == tripID)
     console.log(tripID)
     Object.values(vrbl.tripModal.querySelectorAll('p')).forEach((elem) => {
-        console.log(elem.value)
         elem.innerText=""
         Object.entries(thisTrip).forEach((item) => {
             if(item[0]==elem.id){
@@ -203,6 +205,90 @@ function findTripDetails(tripID, contName) {
             }
         })
     })
+}
+
+function displayDestinations(sortBy) {
+    const destinations = script.promiseState.destinations;
+    const inputTable = vrbl.destList;
+    clearTable(inputTable);
+
+    destinations.forEach((dest) => {
+        dest['country'] = dest.destination.split(',')[1].trim();
+        dest['city'] = dest.destination.split(',')[0];
+    });
+
+    const sortedDest = getSort(destinations, sortBy)
+
+    sortedDest.forEach((dest) => {
+        let tableRow = document.createElement('tr');
+        const row = setKeys(dest);
+        Object.values(row).forEach((key) => {
+            let tableData = document.createElement('td');
+            tableData.innerText = key;
+            tableData.addEventListener('click', (e) => {
+                vrbl.searchDest.value = `${dest.city}`
+                vrbl.searchDest.dispatchEvent(new Event('change'))
+                vrbl.destModal.close()
+            })
+            tableRow.appendChild(tableData);
+        });
+        inputTable.appendChild(tableRow);
+    });
+
+}
+
+function clearTable(table) {
+    const rows = table.getElementsByTagName('tr');
+    for (let i = rows.length - 1; i > 0; i--) {
+        table.removeChild(rows[i]); 
+    }
+}
+
+function getSort(destinations, sortBy) {
+
+    let sortedDest;
+
+    switch (sortBy) {
+        case 'city':
+        case 'country':
+            sortedDest = destinations.sort((a, b) => a[sortBy].localeCompare(b[sortBy]));
+            break;
+
+        case 'estimatedLodgingCostPerDay':
+        case 'estimatedFlightCostPerPerson':
+            sortedDest = destinations.sort((a, b) => a[sortBy] - b[sortBy]);
+            break;
+
+        default:
+            sortedDest = destinations; // If sortBy is not recognized, return unsorted array
+            break;
+    }
+
+    return sortedDest;
+
+}
+
+function setKeys(thisDest) {
+
+    const dest = {}
+    
+    dest['city'] = thisDest.city
+    dest['country'] = thisDest.country
+    dest['lodging'] = thisDest.estimatedLodgingCostPerDay
+    dest['flight'] = thisDest.estimatedFlightCostPerPerson
+
+    return dest
+}
+
+function displayDuration(e) {
+    const startDate = new Date(vrbl.depDate.value);
+    const endDate = new Date(e.target.value);
+    
+    const difference = differenceInDays(endDate, startDate);
+    vrbl.tripDur.innerText = ''
+    vrbl.tripDur.innerText += `  ${difference} day(s)`
+    vrbl.bookingForm.querySelector('#duration').value = difference
+    vrbl.bookingForm.querySelector('#duration').dispatchEvent(new Event('change'))
 }
 
 
@@ -213,6 +299,9 @@ export {
     userDropDown,
     selectedUser,
     toggleCollapsible,
-    displayTrips
+    displayTrips,
+    displayDestinations,
+    updateUserInfo,
+    displayDuration
 }
 

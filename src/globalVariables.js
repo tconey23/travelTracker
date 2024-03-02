@@ -1,4 +1,4 @@
-export{ clientInterface, costInfo, tripInfo, pendingCost, approvedCost, totalCost, costData, tripName, tripDate, tripModal, tripLinks, dashboard, tripList, spentList, totalSpent, myTrips, currUserName, password, travelers, userList, userName, loginPanel, loginButton, hidden, travelerData, tripData, destinationData, rawData, rawDataContainer }
+export{ bookingForm, bookingFormInputs, destList, destModal, searchDest, travelerID, firstName, lastName, bookTrip, tripDur, retDate, depDate, travLabel, numTrav, clientInterface, costInfo, tripInfo, pendingCost, approvedCost, totalCost, costData, tripName, tripDate, tripModal, tripLinks, dashboard, tripList, spentList, totalSpent, myTrips, currUserName, password, travelers, userList, userName, loginPanel, loginButton, hidden, travelerData, tripData, destinationData, rawData, rawDataContainer }
 import * as script from "./scripts"
 
 const rawDataContainer = document.querySelector('#tableContainer')
@@ -29,4 +29,18 @@ const pendingCost = document.querySelector('#totalSpent > h3.totalCost.pending')
 const tripInfo = document.querySelector('.tripInfo')
 const costInfo = document.querySelector('.costInfo')
 const clientInterface = document.querySelector('.clientInteraction')
+const numTrav = document.querySelector('#numTravelers')
+const travLabel = document.querySelector('.travCount')
+const depDate = document.querySelector('#depDate')
+const retDate = document.querySelector('#retDate')
+const tripDur = document.querySelector('.tripDur')
+const bookTrip = document.querySelector('.bookTrip')
+const travelerID = document.querySelector('#travelerID')
+const firstName = document.querySelector('#firstName')
+const lastName = document.querySelector('#lastName')
+const searchDest = document.querySelector('#dest')
+const destModal = document.querySelector('.destModal')
+const destList = document.querySelector('.destList')
+const bookingFormInputs = document.querySelectorAll('.bookingForm > input, span > input')
+const bookingForm = document.querySelector('.bookingForm')
 const travelers = {}

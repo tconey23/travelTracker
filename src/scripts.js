@@ -6,6 +6,21 @@ import * as vrbl from "./globalVariables"
 // import './css/styles.css';
 import './css/main.scss'
 import './images/turing-logo.png'
+import * as dom from "./domUpdate"
+import { addDays } from "date-fns";
+
+let booking = {
+    travelerID: null,
+    firstName: null,
+    lastName: null,
+    dest: null,
+    depDate: null,
+    retDate: null,
+    duration: null,
+    numTravelers: null,
+    lodging: null,
+}
+
 
 let promiseState
 
@@ -31,6 +46,8 @@ argumentsArray.forEach(arg => {
 Promise.all(promises)
     .then(results => {
         updateData(results);
+        correctCountries()
+        dom.updateUserInfo(25)
     })
     .catch(error => {
         console.error(error);
@@ -51,6 +68,8 @@ Promise.all(promises)
             promiseState[key] = res[key]
         })
 
+        promiseState.destinations.forEach((dest) => {
+        })
     }
 
     function updateUserTrips(user) {
@@ -108,6 +127,20 @@ Promise.all(promises)
         }
     }
 
+    function correctCountries() {
+        let states = ['Alaska', 'Florida', 'New York', 'California', 'Puerto Rico']
+
+        promiseState.destinations.forEach((dest)=>{
+            states.forEach((state)=> {
+                if(dest.destination.includes(state)){
+                    let city = dest.destination.split(',')[0]
+                    let state = dest.destination.split(',')[1].trim()
+                    dest.destination = `${city} (${state}), United States`
+                }
+            })
+        })
+    }
+
 
 
 
@@ -115,6 +148,7 @@ export {
     promiseState,
     updateUserTrips,
     storeCurrentUser,
+    booking
 }
 
 
