@@ -1,4 +1,4 @@
-export{ destName, destID, destFlight, destLodging, lodgingNeeded, nextButton, bookingPg2, returnButton, bookingForm, bookingFormInputs, destList, destModal, searchDest, travelerID, firstName, lastName, bookTrip, tripDur, retDate, depDate, travLabel, numTrav, clientInterface, costInfo, tripInfo, pendingCost, approvedCost, totalCost, costData, tripName, tripDate, tripModal, tripLinks, dashboard, tripList, spentList, totalSpent, myTrips, currUserName, password, travelers, userList, userName, loginPanel, loginButton, hidden, travelerData, tripData, destinationData, rawData, rawDataContainer }
+export{ submitBooking, destName, destID, destFlight, destLodging, lodgingNeeded, nextButton, bookingPg2, returnButton, bookingForm, bookingFormInputs, destList, destModal, searchDest, travelerID, firstName, lastName, bookTrip, tripDur, retDate, depDate, travLabel, numTrav, clientInterface, costInfo, tripInfo, pendingCost, approvedCost, totalCost, costData, tripName, tripDate, tripModal, tripLinks, dashboard, tripList, spentList, totalSpent, myTrips, currUserName, password, travelers, userList, userName, loginPanel, loginButton, hidden, travelerData, tripData, destinationData, rawData, rawDataContainer }
 import * as script from "./scripts"
 
 const destName = document.querySelector("#destName")
@@ -51,5 +51,6 @@ const bookingForm = document.querySelector('.bookingForm')
 const nextButton = document.querySelector('#createReq')
 const returnButton = document.querySelector('#return')
 const bookingPg2 = document.querySelector('.page2')
+const submitBooking = document.querySelector('#submit')
 
 const travelers = {}

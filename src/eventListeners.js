@@ -47,6 +47,21 @@ function setUpListeners() {
     //     vrbl.travLabel.innerText = vrbl.travSlider.value
     // })
 
+    vrbl.submitBooking.addEventListener('click', (e) => {
+        e.preventDefault()
+        script.postBooking['id'] = script.promiseState.trips.length +1
+        script.postBooking['userID'] = script.booking.travelerID
+        script.postBooking['destinationID'] = script.booking.destID
+        script.postBooking['travelers'] = script.booking.numTravelers
+        script.postBooking['date'] = script.booking.depDate
+        script.postBooking['duration'] = script.booking.duration
+        script.postBooking['status'] = 'pending'
+        script.postBooking['suggestedActivities'] = 'unknown'
+
+        script.readyToPost(script.postBooking,'http://localhost:3001/api/v1/trips')
+
+    })
+
     vrbl.bookTrip.addEventListener('click', () => {
 
         let inputArray = [vrbl.travelerID, vrbl.firstName, vrbl.lastName]

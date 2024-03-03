@@ -1,4 +1,4 @@
-
+import * as script from './scripts'
 
 function fetchData(endpoint) {
     return fetchPoint(endpoint)
@@ -21,8 +21,31 @@ function fetchData(endpoint) {
         break;
     }
   }
+
+  // script.readyToPost(script.testBooking,'http://localhost:3001/api/v1/trips')
+
+  function postData(data, endpoint) {
+    console.log(data, endpoint)
+    fetch(endpoint, {
+      method: 'POST',
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(data)
+    })
+    .then(response => {
+      response.json()
+    })
+    .then(data => {
+      console.log(data)
+    })
+    .catch(error => {
+      console.log(error)
+    })
+  }
   
 
 export {
-    fetchData
+    fetchData,
+    postData
 }

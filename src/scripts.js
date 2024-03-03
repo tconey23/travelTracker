@@ -1,4 +1,4 @@
-import { fetchData } from './APICalls';
+import { fetchData, postData } from './APICalls';
 import { dataDump } from './globalVariables';
 import { updateDOM } from './domUpdate'
 import { setUpListeners } from './eventListeners';
@@ -25,6 +25,23 @@ let booking = {
     destFlight: null,
     destLodging: null
 }
+
+let postBooking = {
+    id: null,
+    userID: null,
+    destinationID: null,
+    travelers: null,
+    date: null,
+    duration: null,
+    status: null,
+    suggestedActivities: null
+}
+
+function readyToPost(booking, endpoint) {
+    postData(booking, endpoint)
+}
+
+
 
 
 let promiseState
@@ -75,6 +92,7 @@ Promise.all(promises)
 
         promiseState.destinations.forEach((dest) => {
         })
+        console.log(promiseState.trips.length)
     }
 
     function updateUserTrips(user) {
@@ -154,7 +172,9 @@ export {
     updateUserTrips,
     storeCurrentUser,
     getDestination,
-    booking
+    booking,
+    postBooking,
+    readyToPost
 }
 
 
