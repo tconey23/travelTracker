@@ -227,13 +227,19 @@ function displayDestinations(sortBy) {
             tableData.innerText = key;
             tableData.addEventListener('click', (e) => {
                 vrbl.searchDest.value = `${dest.city}`
+                vrbl.destName.value = `${dest.destination}`
+                vrbl.destID.value = `${dest.id}`
+                vrbl.destFlight.value = `${dest.estimatedFlightCostPerPerson}`
+                vrbl.destLodging.value = `${dest.estimatedLodgingCostPerDay}`
                 vrbl.searchDest.dispatchEvent(new Event('change'))
                 vrbl.destModal.close()
+                console.log(vrbl.destID.value,vrbl.destFlight.value,vrbl.destLodging.value)
             })
             tableRow.appendChild(tableData);
         });
         inputTable.appendChild(tableRow);
     });
+    
 
 }
 
@@ -291,6 +297,31 @@ function displayDuration(e) {
     vrbl.bookingForm.querySelector('#duration').dispatchEvent(new Event('change'))
 }
 
+function bookingFormPg2 () {
+    const detailFields = vrbl.bookingPg2.getElementsByTagName('h4')
+    const flightCost = vrbl.bookingPg2.querySelector('#destFlight')
+    const lodgingCost = vrbl.bookingPg2.querySelector('#destLodging')
+    const totalCost = vrbl.bookingPg2.querySelector('#totalCost')
+
+    const lodging = script.booking.destLodging * script.booking.numTravelers
+    const flight = script.booking.destFlight * script.booking.duration
+
+    lodgingCost.innerText = ''
+    flightCost.innerText = ''
+    totalCost.innerText = ''
+
+    console.log(script.booking)
+    Array.from(detailFields).forEach((field) => {
+        field.innerText = script.booking[field.id]
+    })
+    flightCost.innerText += `$${flight}`
+    if(script.booking.lodging){
+        lodgingCost.innerText += `$${lodging}`
+    }
+
+    totalCost.innerText += `$${((lodging+flight)*1.10).toFixed(2)}`
+}
+
 
 export {
     updateDOM,
@@ -302,6 +333,7 @@ export {
     displayTrips,
     displayDestinations,
     updateUserInfo,
-    displayDuration
+    displayDuration,
+    bookingFormPg2
 }
 

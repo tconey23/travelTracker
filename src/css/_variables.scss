@@ -49,9 +49,16 @@ $mainFont: "Hedvig Letters Serif", serif;
     span{
         display: flex;
         flex-direction: row;
-        align-items: flex-end;
+        align-items: baseline;
+        flex-wrap: wrap;
+
         p{
             margin-left: 1px;
+        }
+
+        h4{
+            margin: 6px;
+            text-decoration: underline;
         }
     }
     .dateSpan{

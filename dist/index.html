@@ -92,7 +92,7 @@
             <span><input id="lastName" type="text" class="" placeholder="Last Name" required><label for="lastName"></label></span>
             <h3>Trip Details</h3>
             <label>Destination*</label>
-            <span><input id="dest" type="search" required></span>
+            <span><input id="dest" type="search" required><input id="destName" class="dataField hidden"><input id="destID" class="dataField hidden"><input id="destFlight" class="dataField hidden"><input id="destLodging" class="dataField hidden"></span>
             <span class="dateSpan"><label>Date of Departure*</label>
             <input id="depDate" type="date" required>
             <label>Date of Return*</label>
@@ -103,10 +103,30 @@
             <label>Number of travelers*</label>
             <span><input class="range" id="numTravelers" type="number" min="1" max="10" value="1" step="1" list="travSelect" required><p class="travCount"></p></span>
             <label>Include Lodging?*</label>
-            <input id="lodging" type="checkbox" required>
+            <span><input name="lodging" id="lodgingTrue" type="radio" value="true" required><label for="lodgingTrue">Yes</label><input id="lodging" for="lodgingTrue" class="dataField hidden"></span>
+			<span><input name="lodging" id="lodgingFalse" type="radio" value="false" required><label for="lodgingFalse">No</label></span>
             <input id="createReq" type="submit" value="Create Booking">
             <input id="submit" class="hidden" type="submit">
-            <dialog class="error"><caption>Please complete the following fields before submission</caption></dialog>
+            <dialog class="error"><caption>Please complete the highlighted fields before submission</caption></dialog>
+          </form>
+          <form class="bookingForm page2 hidden">
+            <h3>Traveler Details</h3>
+            <span><label>Traveler ID</label><h4 id="travelerID">25</h4></span>
+            <span><label>Traveler Name</label><h4 id="firstName">Leighton</h4><h4 id="lastName"> Doerrling</h4></span>
+            <h3>Trip Details</h3>
+            <span><label>Booking #</label><h4 id="bookingID">Pending</h4></span>
+            <span><label>Destination</label><h4 id="dest">Anchorage</h4></span>
+            <span><label>Date of Departure</label><h4 id="depDate">03/02/2024</h4><label>Date of Return</label><h4 id="retDate">03/10/2024</h4></span>
+            <span><label class="tripDur">Trip duration:</label><h4 id="duration">8 day(s)</h4></span>
+            <span><label>Number of travelers</label><h4 id="numTravelers">3</h4></span>
+            <span><label>Include Lodging?</label><h4 id="lodging">YES</h4></span>
+            <article>
+              <h3>Travel Cost</h3>
+              <span><label>Flight cost: </label><h2 id="destFlight" class="cost"></h2></span>
+              <span><label>Lodging Cost: </label><h2 id="destLodging" class="cost"></h2></span>
+              <span><label>Total Cost: </label><h2 id="totalCost" class="cost">Total Cost: </h2></span>
+            </article>
+            <span><input id="return" type="submit" value="Edit Booking"><input id="submit" class="" type="submit"></span>
           </form>
         </section>
 			</main>

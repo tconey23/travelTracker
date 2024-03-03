@@ -287,6 +287,13 @@ body {
                         form{
                             @include formStyling;
                         }
+                        .bookingForm.page2{
+                          
+                      }
+                      article{
+                        height: 40%;
+                        width: 100%;
+                      }
                     }
 
                 }

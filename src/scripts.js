@@ -11,14 +11,19 @@ import { addDays } from "date-fns";
 
 let booking = {
     travelerID: null,
+    bookingID: null,
     firstName: null,
     lastName: null,
     dest: null,
+    destName: null,
+    destID: null,
     depDate: null,
     retDate: null,
     duration: null,
     numTravelers: null,
     lodging: null,
+    destFlight: null,
+    destLodging: null
 }
 
 
@@ -148,6 +153,7 @@ export {
     promiseState,
     updateUserTrips,
     storeCurrentUser,
+    getDestination,
     booking
 }
 

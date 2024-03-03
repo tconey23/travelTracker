@@ -86,30 +86,48 @@ function setUpListeners() {
         })
     })
 
-    vrbl.bookingForm.addEventListener('click', (e) => {
-        let error = vrbl.bookingForm.querySelector('.error')
-        let errorContent = error.getElementsByTagName('p')
-        script.booking.numTravelers = vrbl.numTrav.value
+    vrbl.nextButton.addEventListener('click', (e) => { 
+        e.preventDefault()
+        let inputArray = [vrbl.destID, vrbl.destFlight, vrbl.destLodging, vrbl.travelerID, vrbl.firstName, vrbl.lastName, vrbl.searchDest, vrbl.depDate, vrbl.retDate, vrbl.numTrav, vrbl.lodgingNeeded]
+        let reqCount = 0
+        inputArray.forEach((input) => {
+            if(!input.value){
+                console.log(input)
+                input.style.border = '1px solid red'
+            } else {
+                reqCount ++
+                input.style.border = '1px solid #e5e5e5'
+                script.booking[input.id] = input.value
+            }
+        })
 
-        if(e.target.id === "createReq"){
-            vrbl.bookingFormInputs.forEach((input)=> {
-                if(!input.value && input.id !== 'submit' && input.id !== 'duration'){
-                    input.style.border = '1px solid red'
-                    error.innerHTML += `<p>${input.id}</p>`
-                    error.showModal()
-                    setTimeout(() => {
-                        error.close()
-                        if(errorContent){
-                            Array.from(errorContent).forEach((elem) => {
-                                elem.remove()
-                            })
-                             }
-                    }, 2000);
-                }
-            })
-            e.preventDefault()
-            console.log(script.booking)
+        if(reqCount == 11){
+            script.booking.bookingID = "pending"
+            dom.bookingFormPg2()
+            vrbl.bookingForm.classList.toggle('hidden')
+            vrbl.bookingPg2.classList.toggle('hidden')
         }
+
+        console.log(script.booking)
+
+    })
+
+    vrbl.bookingForm.querySelector('#lodgingTrue').addEventListener('change', () => {
+        if(vrbl.bookingForm.querySelector('#lodgingTrue').checked) {
+            vrbl.bookingForm.querySelector('#lodging').value = true
+        }
+    })
+
+    vrbl.bookingForm.querySelector('#lodgingFalse').addEventListener('change', () => {
+        if(vrbl.bookingForm.querySelector('#lodgingFalse').checked) {
+            vrbl.bookingForm.querySelector('#lodging').value = false
+        }
+    })
+
+    vrbl.returnButton.addEventListener('click', (e) => {
+        e.preventDefault()
+        vrbl.bookingForm.classList.toggle('hidden')
+        vrbl.bookingPg2.classList.toggle('hidden')
     })
 }
 
