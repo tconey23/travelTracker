@@ -3,6 +3,7 @@ import * as vrbl from "./globalVariables"
 import * as script from "./scripts"
 import * as evt from "./eventListeners"
 const { differenceInDays } = require('date-fns')
+const { addDays, format } = require('date-fns')
 // import * as map from "./map"
 
 
@@ -15,7 +16,7 @@ function displayRawData() {
 
 function userLogin() {
     if(vrbl.userName && vrbl.password.value === 'travel'){
-        vrbl.loginPanel.classList.toggle('hidden')
+        vrbl.landing.classList.toggle('hidden')
         vrbl.dashboard.classList.toggle('hidden')
         vrbl.clientInterface.classList.toggle('hidden')
         updateUserInfo(vrbl.userName.value)
@@ -49,6 +50,7 @@ function selectedUser(e) {
 }
 
 function updateUserInfo(user) {
+    // console.log(user)
     vrbl.currUserName.innerText = script.storeCurrentUser(user)
     displayTrips(script.updateUserTrips(user))
     displayTripCost(script.updateUserTrips(user))
@@ -77,17 +79,17 @@ function displayTrips(data) {
         const newLink = document.createElement('p');
         newLink.textContent = `${trip.dest} \u21d7`;
         newLink.value = trip.dest
-        newLink.date = trip.date
+        newLink.depDate = trip.depDate
         newLink.id = trip.tripID
         newLink.addEventListener('click', (e) => {
-            showTripDetails(e.target.value, e.target.date, e.target.id, vrbl.tripInfo, e)
+            showTripDetails(e.target.value, e.target.depDate, e.target.id, vrbl.tripInfo, e)
         });
 
         const newCell = document.createElement('td');
         newCell.appendChild(newLink);
 
         const dateCell = document.createElement('td');
-        dateCell.textContent = trip.date;
+        dateCell.textContent = trip.depDate;
 
         const statusCell = document.createElement('td')
         statusCell.textContent = trip.status;
@@ -115,17 +117,17 @@ function separateCostByType(type, trip) {
     const newLink = document.createElement('p');
     newLink.textContent = `${trip.dest} \u21d7`;
     newLink.value = trip.dest
-    newLink.date = trip.date
+    newLink.depDate = trip.depDate
     newLink.id = trip.tripID
     newLink.addEventListener('click', (e) => {
-        showTripDetails(e.target.value, e.target.date, e.target.id, vrbl.costInfo,e)
+        showTripDetails(e.target.value, e.target.depDate, e.target.id, vrbl.costInfo,e)
     });
 
     const newCell = document.createElement('td');
     newCell.appendChild(newLink);
 
     const dateCell = document.createElement('td');
-    dateCell.textContent = trip.date;
+    dateCell.textContent = trip.depDate;
 
     const flightCostCell = document.createElement('td');
     flightCostCell.textContent = trip.flightCost;
@@ -186,17 +188,17 @@ approvedSum = 0
     })
 }
 
-function showTripDetails(trip, date, tripID, contName, e) {
+function showTripDetails(trip, depDate, tripID, contName, e) {
     vrbl.tripName.innerText = trip
-    vrbl.tripDate.innerText = date
+    vrbl.tripDate.innerText = depDate
     findTripDetails(tripID, contName)
     vrbl.tripModal.showModal()
 }
 
 function findTripDetails(tripID, contName) {
-  let userTrips = script.promiseState.currentUserTrips
+  let userTrips = script.promiseState.singleTravelerTrips
     const thisTrip = userTrips.find((trip) => trip.tripID == tripID)
-    console.log(tripID)
+    // console.log(tripID)
     Object.values(vrbl.tripModal.querySelectorAll('p')).forEach((elem) => {
         elem.innerText=""
         Object.entries(thisTrip).forEach((item) => {
@@ -228,7 +230,7 @@ function displayDestinations(sortBy) {
             tableData.addEventListener('click', (e) => {
                 vrbl.searchDest.value = `${dest.city}`
                 vrbl.destName.value = `${dest.destination}`
-                vrbl.destID.value = `${dest.id}`
+                vrbl.destID.value = dest.id
                 vrbl.destFlight.value = `${dest.estimatedFlightCostPerPerson}`
                 vrbl.destLodging.value = `${dest.estimatedLodgingCostPerDay}`
                 vrbl.searchDest.dispatchEvent(new Event('change'))
@@ -322,6 +324,74 @@ function bookingFormPg2 () {
     totalCost.innerText += `$${((lodging+flight)*1.10).toFixed(2)}`
 }
 
+function showUserMsg(msg) {
+    vrbl.userMsg.querySelector('h3').innerText = msg
+    vrbl.userMsg.showModal()
+
+    setTimeout(() => {
+       vrbl.userMsg.close() 
+    }, 2500);
+}
+
+
+
+function editBooking(tripID) {
+    vrbl.bookingForm.reset()
+    const userData = script.promiseState.singleTraveler
+    const tripData = script.promiseState.singleTravelerTrips.filter((trip) => trip.tripID == tripID)
+
+    const input = Array.from(vrbl.bookingForm.querySelectorAll('* > input'))
+    const retDate = vrbl.bookingForm.querySelector('#retDate')
+   
+    input.reduce((acc, fld) => {
+
+        input[acc].value = convertKeys(input[acc].id, input[acc])
+        acc++
+        return acc
+    }, 0)
+
+    function convertKeys(input, inputField) {
+        switch(input) {
+            case 'travelerID': return userData.id
+            break;
+            case 'firstName' : return userData.name.split(' ')[0]
+            break;
+            case 'lastName' : return userData.name.split(' ')[1]
+            break;
+            case 'edit' : return 'edit'
+            break;
+            case 'dest' :      return tripData[0].dest.split(',')[0]
+            break;
+            case 'depDate' : return format(tripData[0].depDate, 'yyyy-MM-dd')
+            break;
+            case 'retDate' :    let date = new Date(format(tripData[0].depDate, 'yyyy-MM-dd'))
+                                let duration = parseInt(tripData[0].duration.split('')[0])
+                                let daySum = addDays(date, duration)
+                                return format(daySum, 'yyyy-MM-dd') 
+            break;
+            case 'numTravelers' : return tripData[0].numTravelers
+            break;
+            case 'lodgingTrue' :  if(tripData[0].lodgingCost > 0){inputField.checked = true} else {inputField.checked = true}
+            break;
+            case 'createReq' :  return 'Update booking'
+            break;
+            case 'deleteReq' :  return 'Delete booking'
+            break;
+        }
+    }
+
+        vrbl.bookingForm.querySelector('.editLabel').classList.toggle('hidden')
+        vrbl.bookingForm.querySelector('.editLabel').innerText = `Editing booking number: ${tripData[0].tripID}`
+        vrbl.tripDur.innerText = `Trip duration: ${tripData[0].duration}`
+
+}
+
+function confirmDelete(msg) {
+    vrbl.userMsg.querySelector('h3').innerText = msg
+    vrbl.userMsg.querySelector('.deleteBooking').classList.toggle('hidden')
+    vrbl.userMsg.querySelector('.cancel').classList.toggle('hidden')
+    vrbl.userMsg.show()
+}
 
 export {
     updateDOM,
@@ -334,6 +404,9 @@ export {
     displayDestinations,
     updateUserInfo,
     displayDuration,
-    bookingFormPg2
+    bookingFormPg2,
+    showUserMsg,
+    editBooking,
+    confirmDelete
 }
 

@@ -14,16 +14,6 @@ function setUpListeners() {
 
     vrbl.userName.addEventListener('keyup', (e) => {
         e.preventDefault()
-        // dom.userDropDown(e.target.value)
-
-        // Array.from(vrbl.userList.children).forEach((child) => {
-        //     child.addEventListener('click', (e) => {
-        //         dom.selectedUser(e);
-        //     });
-        // });
-
-
-        
     })
 
     document.querySelector(".clientDashboard").addEventListener('click', (e) => {
@@ -34,6 +24,13 @@ function setUpListeners() {
 
     const tripCancelButton = vrbl.tripModal.querySelector('button[value="cancel"]');
     tripCancelButton.addEventListener('click', (event) => {
+        
+        vrbl.tripModal.close()
+    })
+
+    const tripEditButton = vrbl.tripModal.querySelector('button[value="edit"]');
+    tripEditButton.addEventListener('click', (event) => {
+        dom.editBooking(document.querySelector("#tripID").innerText)
         vrbl.tripModal.close()
     })
 
@@ -49,24 +46,30 @@ function setUpListeners() {
 
     vrbl.submitBooking.addEventListener('click', (e) => {
         e.preventDefault()
+
+        let formattedDate = script.booking.depDate.split('-')
+        formattedDate = `${formattedDate[0]}/${formattedDate[1]}/${formattedDate[2]}`
+        
         script.postBooking['id'] = script.promiseState.trips.length +1
         script.postBooking['userID'] = script.booking.travelerID
-        script.postBooking['destinationID'] = script.booking.destID
+        script.postBooking['destinationID'] = parseInt(script.booking.destID)
         script.postBooking['travelers'] = script.booking.numTravelers
-        script.postBooking['date'] = script.booking.depDate
+        script.postBooking['date'] = formattedDate
         script.postBooking['duration'] = script.booking.duration
         script.postBooking['status'] = 'pending'
         script.postBooking['suggestedActivities'] = 'unknown'
-
         script.readyToPost(script.postBooking,'http://localhost:3001/api/v1/trips')
-
+        
+        vrbl.bookingPg2.classList.toggle('hidden')
+        vrbl.bookingForm.classList.toggle('hidden')
+        vrbl.bookingForm.reset()
     })
 
     vrbl.bookTrip.addEventListener('click', () => {
 
         let inputArray = [vrbl.travelerID, vrbl.firstName, vrbl.lastName]
 
-        let user = script.promiseState.currentUser
+        let user = script.promiseState.singleTraveler
         let name = user.name.split(" ")
         vrbl.travelerID.value = user.id
         vrbl.firstName.value = name[0]
@@ -143,6 +146,29 @@ function setUpListeners() {
         e.preventDefault()
         vrbl.bookingForm.classList.toggle('hidden')
         vrbl.bookingPg2.classList.toggle('hidden')
+    })
+
+    vrbl.bookingForm.querySelector('#deleteReq').addEventListener('click', (event) => {
+        event.preventDefault()
+        dom.confirmDelete('Are you sure you want to delete this booking?')
+    })
+
+    vrbl.userMsg.querySelector('.cancel').addEventListener('click', (e) => {
+        e.preventDefault()
+        vrbl.userMsg.querySelector('.cancel').classList.toggle('hidden')
+        vrbl.userMsg.querySelector('.deleteBooking').classList.toggle('hidden')
+        vrbl.userMsg.close()
+    })
+
+    vrbl.userMsg.querySelector('.deleteBooking').addEventListener('click', (e) => {
+        e.preventDefault()
+        vrbl.userMsg.querySelector('.cancel').classList.toggle('hidden')
+        vrbl.userMsg.querySelector('.deleteBooking').classList.toggle('hidden')
+        script.deleteBooking(vrbl.bookingForm.querySelector('.editLabel').innerText)
+        vrbl.bookingForm.querySelector('.tripDur').innerText = 'Trip duration: '
+        vrbl.bookingForm.querySelector('.editLabel').classList.add('hidden')
+        vrbl.bookingForm.reset()
+        vrbl.userMsg.close()
     })
 }
 

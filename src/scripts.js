@@ -1,13 +1,24 @@
-import { fetchData, postData } from './APICalls';
-import { dataDump } from './globalVariables';
 import { updateDOM } from './domUpdate'
 import { setUpListeners } from './eventListeners';
 import * as vrbl from "./globalVariables"
 // import './css/styles.css';
 import './css/main.scss'
 import './images/turing-logo.png'
+import './images/pexels-bri-schneiter-346529.jpg'
 import * as dom from "./domUpdate"
+import * as api from "./apiCalls"
 import { addDays } from "date-fns";
+
+getData(['travelers', 'destinations', 'trips'])
+let promiseState
+
+promiseState = {
+    travelers: null,
+    singleTraveler: null,
+    trips: null,
+    destinations: null,
+    singleTravelerTrips: null,
+}
 
 let booking = {
     travelerID: null,
@@ -37,31 +48,21 @@ let postBooking = {
     suggestedActivities: null
 }
 
+vrbl.userName.value = Math.floor(Math.random() * 50)
+
 function readyToPost(booking, endpoint) {
     postData(booking, endpoint)
+    getData(['trips'])
+    updateDOM(promiseState.singleTravelerTrips)
 }
 
 
-
-
-let promiseState
-
-promiseState = {
-    travelers: null,
-    singleTraveler: null,
-    trips: null,
-    destinations: null,
-    currentUser: null,
-    currentUserTrips: null,
-    currentUserSpend: null,
-}
-
-const argumentsArray = ['travelers', 'destinations', 'trips'];
+function getData(argumentsArray) {
 
 const promises = [];
 
 argumentsArray.forEach(arg => {
-    promises.push(fetchData(arg));
+    promises.push(api.fetchData(arg));
 });
 
 
@@ -69,19 +70,20 @@ Promise.all(promises)
     .then(results => {
         updateData(results);
         correctCountries()
-        dom.updateUserInfo(25)
+        
     })
     .catch(error => {
         console.error(error);
     });
 
-
+}
     setUpListeners()
 
     function storeCurrentUser(user) {
-        promiseState.currentUser = getUserInfo(user)
-        updateDOM(promiseState.currentUserTrips)
-        return promiseState.currentUser.name
+        promiseState.singleTraveler = getUserInfo(user)
+        updateDOM(promiseState.singleTravelerTrips)
+        console.log(promiseState)
+        return promiseState.singleTraveler.name
         }
 
     function updateData(data) {
@@ -89,10 +91,6 @@ Promise.all(promises)
           let key = Object.keys(res)
             promiseState[key] = res[key]
         })
-
-        promiseState.destinations.forEach((dest) => {
-        })
-        console.log(promiseState.trips.length)
     }
 
     function updateUserTrips(user) {
@@ -105,12 +103,12 @@ Promise.all(promises)
                 acc.push({
                     ['tripID']: trip.id,
                     ['dest']: getDestination(trip.destinationID, 'name'),
-                    ['date']: trip.date,
+                    ['depDate']: trip.date,
                     ['numTravelers']: trip.travelers,
                     ['duration']: `${trip.duration} Day(s)`,
                     ['status']: trip.status,
                     ['photo']: getDestination(trip.destinationID, 'photo'),
-                    ['suggActivities']: promiseState.currentUser.travelerType,
+                    ['suggActivities']: promiseState.singleTraveler.travelerType,
                     ['flightCost']: flightCost,
                     ['lodgingCost']: lodgingCost,
                     ['totalCost']: totalCost
@@ -118,7 +116,7 @@ Promise.all(promises)
             }
             return acc
         }, [])
-        promiseState.currentUserTrips = filterTrips
+        promiseState.singleTravelerTrips = filterTrips
         return filterTrips
     }
 
@@ -164,6 +162,10 @@ Promise.all(promises)
         })
     }
 
+    function deleteBooking(tripID) {
+        let id = tripID.split(': ')[1]
+        api.deleteData(`http://localhost:3001/api/v1/trips/${id}`)
+    }
 
 
 
@@ -174,7 +176,8 @@ export {
     getDestination,
     booking,
     postBooking,
-    readyToPost
+    readyToPost,
+    deleteBooking
 }
 
 

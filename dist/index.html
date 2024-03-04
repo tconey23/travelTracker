@@ -7,7 +7,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <title>Webpack Starter Kit</title>
+	<title>Webpack Starter Kit</title>
 </head>
 
 <body>
@@ -19,145 +19,128 @@
 			<a></a>
 		</section>
 	</nav>
-	<section class="welcomeContainer hidden">
-		<section class="logIn">
-			<h1>Welcome</h1>
-			<div class="inputContainer">
-				<label for="userNameField">Enter User Name</label>
-				<input type="text" id="userNameField" value="25">
-				<div class="userNames"></div>
-				<label for="passwordField">Enter Password</label>
-				<input type="text" id="passwordField" value="travel">
-				<input type="button" class="loginButton" value="Login"> </div>
-		</section>
-	</section>
-	<main class="dashboardContainer clientMain">
-		<section class="clientDashboard">
-			<article class="myTrips collapsible expanded">
-				<p>My trips</p>
-				<p>&#x257F</p>
-			</article>
-			<div id="myTrips" class="tripList">
-				<div class="table">
-					<table>
-						<tbody id="dataDump" class="tripData">
-							<tr class="tableHeader">
-								<th>Destination</th>
-								<th>Trip Date</th>
-								<th>Status</th>
-							</tr>
-						</tbody>
-					</table>
-				</div>
-			</div>
-			<article class="totalSpent collapsible">
-				<p>Total spent</p>
-				<p>&#x257F</p>
-			</article>
-			<div id="totalSpent" class="spentList collapsed">
-				<div class="table">
-					<table>
-						<tbody id="dataDump" class="costData approved">
-							<tr class="tableHeader">
-								<th>Destination</th>
-								<th>Trip Date</th>
-								<th>Flight Cost</th>
-								<th>Lodging Cost</th>
-								<th title="Includes 10% Agent Fee">Total Cost<sup>*</sup></th>
-								<th>Status</th>
-							</tr>
-						</tbody>
-						<tbody id="dataDump" class="costData pending"> </tbody>
-					</table>
-				</div>
-				<h3 class="totalCost approved"></h3>
-				<h3 class="totalCost pending"></h3> </div>
-		</section>
+	<main class="landing">
+		<aside class="welcomeContainer">
+			<section class="logIn">
+				<h1>Welcome</h1>
+				<div class="inputContainer">
+					<!-- <label for="userNameField">Enter User Name</label> -->
+					<input type="text" id="userNameField" placeholder="user name" value="">
+					<div class="userNames"></div>
+					<!-- <label for="passwordField">Enter Password</label> -->
+					<input type="text" id="passwordField" placeholder="password" value="travel">
+					<input type="button" class="loginButton" value="Login"> </div>
+			</section>
+		</aside>
+		<section class="graphic"> <img src="./images/pexels-bri-schneiter-346529.jpg"> </section>
 	</main>
-	<main class="interfaceContainer clientMain">
-		<section class="clientInteraction">
-			<header></header>
-			<main>
-				<aside>
-					<div>
-						<h3 class="bookTrip">Book your next trip!</h3></div>
-				</aside>
-				<section>
-          <form class="bookingForm">
-            <h3>Traveler Details</h3>
-            <label>Traveler ID*</label>
-            <span><input id="travelerID" type="text" class="" required><label for="travelerID"></label></span>
-            <label>Traveler Name*</label>
-            <span><input id="firstName" type="text" class="" placeholder="First Name" required><label for="firstName"></label></span>
-            <span><input id="lastName" type="text" class="" placeholder="Last Name" required><label for="lastName"></label></span>
-            <h3>Trip Details</h3>
-            <label>Destination*</label>
-            <span><input id="dest" type="search" required><input id="destName" class="dataField hidden"><input id="destID" class="dataField hidden"><input id="destFlight" class="dataField hidden"><input id="destLodging" class="dataField hidden"></span>
-            <span class="dateSpan"><label>Date of Departure*</label>
-            <input id="depDate" type="date" required>
-            <label>Date of Return*</label>
-            <input id="retDate" type="date" class="readOnly" required readonly disabled>
-            <input id="duration" class="hidden">
-            </span>
-            <p class="tripDur">Trip duration: </p>
-            <label>Number of travelers*</label>
-            <span><input class="range" id="numTravelers" type="number" min="1" max="10" value="1" step="1" list="travSelect" required><p class="travCount"></p></span>
-            <label>Include Lodging?*</label>
-            <span><input name="lodging" id="lodgingTrue" type="radio" value="true" required><label for="lodgingTrue">Yes</label><input id="lodging" for="lodgingTrue" class="dataField hidden"></span>
-			<span><input name="lodging" id="lodgingFalse" type="radio" value="false" required><label for="lodgingFalse">No</label></span>
-            <input id="createReq" type="submit" value="Create Booking">
-            <!-- <input id="submit" class="hidden" type="submit"> -->
-            <dialog class="error"><caption>Please complete the highlighted fields before submission</caption></dialog>
-          </form>
-          <form class="bookingForm page2 hidden">
-            <h3>Traveler Details</h3>
-            <span><label>Traveler ID</label><h4 id="travelerID">25</h4></span>
-            <span><label>Traveler Name</label><h4 id="firstName">Leighton</h4><h4 id="lastName"> Doerrling</h4></span>
-            <h3>Trip Details</h3>
-            <span><label>Booking #</label><h4 id="bookingID">Pending</h4></span>
-            <span><label>Destination</label><h4 id="dest">Anchorage</h4></span>
-            <span><label>Date of Departure</label><h4 id="depDate">03/02/2024</h4><label>Date of Return</label><h4 id="retDate">03/10/2024</h4></span>
-            <span><label class="tripDur">Trip duration:</label><h4 id="duration">8 day(s)</h4></span>
-            <span><label>Number of travelers</label><h4 id="numTravelers">3</h4></span>
-            <span><label>Include Lodging?</label><h4 id="lodging">YES</h4></span>
-            <article>
-              <h3>Travel Cost</h3>
-              <span><label>Flight cost: </label><h2 id="destFlight" class="cost"></h2></span>
-              <span><label>Lodging Cost: </label><h2 id="destLodging" class="cost"></h2></span>
-              <span><label>Total Cost: </label><h2 id="totalCost" class="cost">Total Cost: </h2></span>
-            </article>
-            <span><input id="return" type="submit" value="Edit Booking"><input id="submit" class="" type="submit"></span>
-          </form>
-        </section>
-			</main>
-			<footer></footer>
-		</section>
+	<main class="clientOverview">
+		<div class="tabPanel">
+			<section class="dashboardContainer clientMain hidden">
+				<section class="clientDashboard">
+					<article class="myTrips collapsible expanded">
+						<p>My trips</p>
+						<p>&#x257F;</p>
+					</article>
+					<div id="myTrips" class="tripList">
+						<div class="table">
+							<table>
+								<tbody id="dataDump" class="tripData">
+									<tr class="tableHeader">
+										<th>Destination</th>
+										<th>Trip Date</th>
+										<th>Status</th>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+					<article class="totalSpent collapsible">
+						<p>Total spent</p>
+						<p>&#x257F;</p>
+					</article>
+					<div id="totalSpent" class="spentList collapsed">
+						<div class="table">
+							<table>
+								<tbody id="dataDump" class="costData approved">
+									<tr class="tableHeader">
+										<th>Destination</th>
+										<th>Trip Date</th>
+										<th>Flight Cost</th>
+										<th>Lodging Cost</th>
+										<th title="Includes 10% Agent Fee">Total Cost<sup>*</sup></th>
+										<th>Status</th>
+									</tr>
+								</tbody>
+								<tbody id="dataDump" class="costData pending"> </tbody>
+							</table>
+						</div>
+						<h3 class="totalCost approved"></h3>
+						<h3 class="totalCost pending"></h3> </div>
+				</section>
+			</section>
+			<section class="interfaceContainer clientMain hidden">
+				<section class="clientInteraction">
+					<main>
+						<aside>
+							<div>
+								<h3 class="bookTrip">-Book your next trip-</h3>
+								<h3 class="bookTrip">-Edit pending trips-</h3> </div>
+						</aside>
+						<form class="bookingForm">
+							<h3>Traveler Details</h3>
+							<label>Traveler ID*</label> <span><input id="travelerID" type="text" class="" required><label for="travelerID"></label></span>
+							<label>Traveler Name*</label> <span><input id="firstName" type="text" class="" placeholder="First Name" required><label for="firstName"></label></span> <span><input id="lastName" type="text" class="" placeholder="Last Name" required><label for="lastName"></label></span> <span><h3>Trip Details</h3><label class="editLabel hidden">Editing booking number: </label></span>
+							<label>Destination*</label>
+							<input id="edit" value="new" class="dataField editFlag hidden" type="text"> <span><input id="dest" type="search" required><input id="destName" class="dataField hidden"><input id="destID" class="dataField hidden"><input id="destFlight" class="dataField hidden"><input id="destLodging" class="dataField hidden"></span> <span class="dateSpan"><label>Date of Departure*</label>
+								<input id="depDate" type="date" required>
+								<label>Date of Return*</label>
+								<input id="retDate" type="date" class="readOnly" required readonly disabled>
+								<input id="duration" class="hidden">
+								</span>
+							<p class="tripDur">Trip duration: </p>
+							<label>Number of travelers*</label> <span><input class="range" id="numTravelers" type="number" min="1" max="10" value="1" step="1" list="travSelect" required><p class="travCount"></p></span>
+							<label>Include Lodging?*</label> <span><input name="lodging" id="lodgingTrue" type="radio" value="true" required><label for="lodgingTrue">Yes</label><input id="lodging" for="lodgingTrue" class="dataField hidden"></span> <span><input name="lodging" id="lodgingFalse" type="radio" value="false" required><label for="lodgingFalse">No</label></span> <span><input id="createReq" type="submit" value="Create Booking"><input id="deleteReq" type="submit" value="Delete Booking"></span>
+							<!-- <input id="submit" class="hidden" type="submit"> -->
+							<dialog class="error userMessage">
+								<h3 class="userMessage"></h3> <span><button class="deleteBooking hidden">Yes</button><button class="cancel hidden">No</button></span> </dialog>
+						</form>
+						<form class="bookingForm page2 hidden">
+							<h3>Traveler Details</h3> <span><label>Traveler ID</label><h4 id="travelerID">25</h4></span> <span><label>Traveler Name</label><h4 id="firstName">Leighton</h4><h4 id="lastName"> Doerrling</h4></span>
+							<h3>Trip Details</h3> <span><label>Booking #</label><h4 id="bookingID">Pending</h4></span> <span><label>Destination</label><h4 id="dest">Anchorage</h4></span> <span><label>Date of Departure</label><h4 id="depDate">03/02/2024</h4><label>Date of Return</label><h4 id="retDate">03/10/2024</h4></span> <span><label class="tripDur">Trip duration:</label><h4 id="duration">8 day(s)</h4></span> <span><label>Number of travelers</label><h4 id="numTravelers">3</h4></span> <span><label>Include Lodging?</label><h4 id="lodging">YES</h4></span>
+							<article>
+								<h3>Travel Cost</h3> <span><label>Flight cost: </label><h2 id="destFlight" class="cost"></h2></span> <span><label>Lodging Cost: </label><h2 id="destLodging" class="cost"></h2></span> <span><label>Total Cost: </label><h2 id="totalCost" class="cost">Total Cost: </h2></span> </article> <span><input id="return" type="submit" value="Edit Booking"><input id="submit" class="" type="submit"></span> </form>
+					</main>
+				</section>
+			</section>
+		</div>
 	</main>
-  <dialog class="destModal modal">
-    <header class="modalHeader">
+	<dialog class="destModal modal">
+		<header class="modalHeader">
 			<div class="titleContainer">
-				<h4>Select from the list of available destinations below</h4>
+				<h4>Select from the list of available destinations below</h4> </div>
 			<div class="buttonContainer">
 				<button value="cancel" formmethod="dialog">Close</button>
 			</div>
 		</header>
-    <table>
-      <tbody class="destList">
-        <tr class="tableHeader">
-          <th><a id="city">City</a></th><th><a id="country">Country</a></th><th><a id="estimatedLodgingCostPerDay">Lodging Cost</a></th><th><a id="estimatedFlightCostPerPerson">Flight Cost</a></th><th>Photo</th>
-        </tr>
-      </tbody>
-    </table>
-          
-  </dialog>
+		<table>
+			<tbody class="destList">
+				<tr class="tableHeader">
+					<th><a id="city">City</a></th>
+					<th><a id="country">Country</a></th>
+					<th><a id="estimatedLodgingCostPerDay">Lodging Cost</a></th>
+					<th><a id="estimatedFlightCostPerPerson">Flight Cost</a></th>
+					<th>Photo</th>
+				</tr>
+			</tbody>
+		</table>
+	</dialog>
 	<dialog class="tripModal modal">
 		<header class="modalHeader">
 			<div class="titleContainer">Your trip to
 				<h4 class="tripName"></h4> on
 				<h4 class="tripDate"></h4></div>
-			<div class="buttonContainer">
-				<button value="cancel" formmethod="dialog">Close</button>
-			</div>
+			<div class="buttonContainer"> <span><button value="edit" formmethod="dialog">Edit Booking</button><button value="cancel" formmethod="dialog">Close</button></span> </div>
 		</header>
 		<section class="tripInfo modalInfo">
 			<table>
@@ -209,8 +192,9 @@
 		</section>
 		<section> <img src=""> </section>
 	</dialog>
-  <div id='map'></div>
+	<div id='map'></div>
 	<!-- Do not include the scripts.js or class files here - it is done by the webpack server -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/date-fns/2.23.0/date_fns.min.js"></script>
 	<script src="bundle.js"></script>
 </body>
 

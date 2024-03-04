@@ -1,4 +1,4 @@
-export{ submitBooking, destName, destID, destFlight, destLodging, lodgingNeeded, nextButton, bookingPg2, returnButton, bookingForm, bookingFormInputs, destList, destModal, searchDest, travelerID, firstName, lastName, bookTrip, tripDur, retDate, depDate, travLabel, numTrav, clientInterface, costInfo, tripInfo, pendingCost, approvedCost, totalCost, costData, tripName, tripDate, tripModal, tripLinks, dashboard, tripList, spentList, totalSpent, myTrips, currUserName, password, travelers, userList, userName, loginPanel, loginButton, hidden, travelerData, tripData, destinationData, rawData, rawDataContainer }
+export{ landing, userMsg, submitBooking, destName, destID, destFlight, destLodging, lodgingNeeded, nextButton, bookingPg2, returnButton, bookingForm, bookingFormInputs, destList, destModal, searchDest, travelerID, firstName, lastName, bookTrip, tripDur, retDate, depDate, travLabel, numTrav, clientInterface, costInfo, tripInfo, pendingCost, approvedCost, totalCost, costData, tripName, tripDate, tripModal, tripLinks, dashboard, tripList, spentList, totalSpent, myTrips, currUserName, password, travelers, userList, userName, loginPanel, loginButton, hidden, travelerData, tripData, destinationData, rawData, rawDataContainer }
 import * as script from "./scripts"
 
 const destName = document.querySelector("#destName")
@@ -20,7 +20,7 @@ const userList = document.querySelector('.userNames')
 const currUserName = document.querySelector('section.currentUser > h3')
 const myTrips = document.querySelector('.myTrips')
 const totalSpent = document.querySelector('.totalSpent')
-const dashboard = document.querySelector(".clientDashboard")
+const dashboard = document.querySelector(".dashboardContainer")
 const tripList = document.querySelector(".tripList")
 const spentList = document.querySelector(".spentList")
 const tripLinks = document.querySelectorAll('#dataDump > tr > th > a')
@@ -32,7 +32,7 @@ const approvedCost = document.querySelector('#totalSpent > h3.totalCost.approved
 const pendingCost = document.querySelector('#totalSpent > h3.totalCost.pending')
 const tripInfo = document.querySelector('.tripInfo')
 const costInfo = document.querySelector('.costInfo')
-const clientInterface = document.querySelector('.clientInteraction')
+const clientInterface = document.querySelector('.interfaceContainer')
 const numTrav = document.querySelector('#numTravelers')
 const travLabel = document.querySelector('.travCount')
 const lodgingNeeded = document.querySelector('#lodging')
@@ -52,5 +52,7 @@ const nextButton = document.querySelector('#createReq')
 const returnButton = document.querySelector('#return')
 const bookingPg2 = document.querySelector('.page2')
 const submitBooking = document.querySelector('#submit')
+const userMsg = document.querySelector('.userMessage')
+const landing = document.querySelector('.landing')
 
 const travelers = {}
