@@ -16,9 +16,7 @@ function displayRawData() {
 
 function userLogin() {
     if(vrbl.userName && vrbl.password.value === 'travel'){
-        vrbl.landing.classList.toggle('hidden')
-        vrbl.dashboard.classList.toggle('hidden')
-        vrbl.clientInterface.classList.toggle('hidden')
+        dynamicCrossfade(vrbl.landing, vrbl.clientOverview)
         updateUserInfo(vrbl.userName.value)
     } else {
         alert('credentials incorrect')
@@ -65,14 +63,6 @@ function toggleCollapsible(e) {
     }
         e.target.classList.toggle('expanded')
 }
-
-// function displayTrips(data) {
-//     console.log(data)
-//     data.forEach((trip) => {
-//         vrbl.tripData.innerHTML += `<td><a>${trip.dest} &#x21d7</a></th><td>${trip.date}</th><td><img src="${trip.photo}"></th>`
-//     })
-//     evt.secondaryListeners('a')
-// }
 
 function displayTrips(data) {
     data.forEach((trip) => {
@@ -393,6 +383,70 @@ function confirmDelete(msg) {
     vrbl.userMsg.show()
 }
 
+function resetBookingForm(e) {
+
+    let inputArray = [vrbl.travelerID, vrbl.firstName, vrbl.lastName]
+
+    inputArray.forEach((input) => {
+        input.classList.remove('readOnly')
+        input.readOnly = true
+        input.disabled = false
+    })
+    vrbl.retDate.disabled = true
+
+    vrbl.bookingForm.reset()
+    vrbl.bookingPg2.reset()
+}
+
+function showUserTab(user) {
+    const fields = vrbl.userInfo.querySelectorAll('p')
+    const userData = {
+        id: user.singleTraveler.id,
+        name: user.singleTraveler.name,
+        travelerType: user.singleTraveler.travelerType,
+        tripCount: Array.from(user.singleTravelerTrips).length
+        }
+
+        fields.forEach((field)=>{
+            Object.entries(userData).forEach((key)=> {
+              if(key[0] === field.id){
+                field.innerText = `${key[0]}:  ${key[1]}`
+              }
+            })
+        })
+
+        vrbl.userInfo.classList.toggle('hidden')
+}
+
+function dynamicCrossfade(startEl, endEl) {
+    let opacity = 1;
+    console.log(endEl)
+    fadeOut(startEl);
+
+    function fadeOut(startEl) {
+        if (opacity > 0) {
+            opacity -= 0.01;
+            startEl.style.opacity = opacity;
+            setTimeout(() => fadeOut(startEl), 1);
+        } else {
+            startEl.classList.add('hidden')
+           fadeIn(endEl);
+        }
+    }
+
+    function fadeIn(endEl) {
+        endEl.classList.remove('hidden')
+        if (opacity < 1) {
+            opacity += 0.01;
+            endEl.style.opacity = opacity;
+            setTimeout(() => fadeIn(endEl), 1);
+        } else {
+            
+            // setTimeout(() => fadeOut(endEl), 100); 
+        }
+    }
+}
+
 export {
     updateDOM,
     displayRawData,
@@ -407,6 +461,9 @@ export {
     bookingFormPg2,
     showUserMsg,
     editBooking,
-    confirmDelete
+    confirmDelete,
+    resetBookingForm,
+    dynamicCrossfade,
+    showUserTab
 }
 

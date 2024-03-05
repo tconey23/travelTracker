@@ -9,6 +9,7 @@ body {
     flex-wrap: wrap;
     align-content: flex-start;
     justify-content: space-around;
+    overflow: hidden;
         .topNav{
           border: black solid thin;
           max-height: 60px;
@@ -21,7 +22,12 @@ body {
           margin-bottom: 5px;
           background: rgb(66, 84, 131);
             section {
-            height: 75%;
+              width: 80%;
+              display: flex;
+              flex-direction: row;
+              flex-wrap: nowrap;
+              justify-content: flex-start;
+              align-items: center;
             input{
                 font-family: arial;
                 font-weight: bold;
@@ -42,8 +48,12 @@ body {
                 }
             }
             }
+            h1{
+              margin-left: 20px;
+            }
             img{
-                width: 50px;
+              width: 50px;
+              margin-left: 10px;
             }
     
             .currentUser {
@@ -54,8 +64,26 @@ body {
                 justify-content: flex-end;
     
                 h3{
-                color: white;
-                font-size: larger;
+                  color: white;
+                  font-size: larger;
+                  padding: 12px;
+                  &:hover{
+                    cursor: pointer;
+                    background: rgb(39 50 77);
+                  }
+
+                }
+
+                .userInfo{
+                  height: 190px;
+                  width: 200px;
+                  position: absolute;
+                  background: rgba(236, 233, 233, 0.7098039216);
+                  z-index: 2;
+                  top: 60px;
+                  left: 1705px;
+                  box-shadow: #3976ac 4px 3px 10px;
+                  padding: 3px;                  
                 }
     
             }
@@ -69,6 +97,7 @@ body {
         flex-direction: row;
         align-items: flex-start;
         justify-content: center;
+        opacity: 1;
 
           .welcomeContainer {
             width: 30%;
@@ -87,6 +116,10 @@ body {
             align-items: center;
             flex-direction: column;
             justify-content: flex-start;
+
+            img{
+              width: 195px;
+            }
             
             h1{
               color: rgb(242 242 242);
@@ -151,12 +184,35 @@ body {
         .graphic{
           display: flex;
           justify-content: center;
-          align-items: stretch;
+          align-items: flex-start;
           height: 100vh;
           width: 70%;
-
-          img{
-            width: 100%;
+          padding: 5px;
+          .branding{
+            width: 50%;
+            height: 100%;
+            position: absolute;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            h1{
+              font-size: 105px;
+              mix-blend-mode: overlay;
+              color: aliceblue;
+              text-shadow: 8px 6px 4px black;
+            }
+          }
+          .logo{
+            width: 450px;
+            height: 450px;
+            margin-top: 30px;
+            mix-blend-mode: lighten;
+          }
+          .imageScroll{
+            width: 98%;
+            height: 90%;
+            filter: blur(4px) brightness(0.8) contrast(0.8);
           }
         }
 
@@ -165,14 +221,15 @@ body {
       .dashboardContainer{
 
         .clientDashboard {
-            width: 60%;
-            max-height: 70vh;
-            background: white;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 64px;
-            box-shadow: rgba(35, 111, 178, 0.6705882353) 11px 6px 20px 0px;
+          width: 99%;
+          height: 70%;
+          background: white;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          min-height: 64px;
+          box-shadow: rgba(35, 111, 178, 0.6705882353) 11px 6px 20px 0px;
+          overflow: overlay;
             
             article {
             width: 100%;
@@ -215,10 +272,10 @@ body {
             }
         
             .tripList, .spentList {
-            width: 98%;
-            height: 50%;
-            overflow: overlay;
-            border: black solid thin;
+              width: 100%;
+              height: 40%;
+              overflow: overlay;
+              border: black solid thin;
             table {
                 width: 100%;
                 font-size: 13px;
@@ -228,14 +285,18 @@ body {
 
               }
               tr{
+                
 
+                &:hover {
+                  border:black solid thin;
+                  background: aliceblue;
+                  box-shadow: #00000073 0px 7px 20px 7px;
+                  cursor: pointer;
+                }
                 td{
-                    border: black solid thin;
+
                   
-                  &:hover {
-                    background: aliceblue;
-                    cursor: pointer;
-                  }
+
 
                   p{
 
@@ -266,16 +327,17 @@ body {
                 }
 
                 main {
-                    width: 100%;
-                    height: 100%;
-                    display: flex;
-                    flex-direction: row;
-                    flex-wrap: wrap;
-                    justify-content: space-between;
-                    align-items: flex-start;
+                  width: 100%;
+                  height: 100%;
+                  display: flex;
+                  flex-direction: row;
+                  flex-wrap: wrap;
+                  justify-content: flex-start;
+                  align-items: flex-start;
+                  overflow: overlay;
                     aside{
-                        height: 100%;
-                        width: 30%;
+                        height: 97%;
+                        width: 25%;
                         border: rgb(66, 84, 131) solid;
                         h3{
                           background: rgb(66, 84, 131);
@@ -291,6 +353,7 @@ body {
                           margin: 8px;
                           border-radius: 5px;
                           box-shadow: #3b84c473 4px 8px 20px;
+                          overflow: hidden;
                             &:hover {
                                 cursor: pointer;
                                 color: #15191C;
@@ -298,21 +361,65 @@ body {
                             }
                         }
                     }
-                    section {
-                        width: 68%;
-                        height: 100%;
-                        border: black solid thin;
-                        form{
-                            @include formStyling;
-                        }
-                        .bookingForm.page2{
-                          
+
+                    form {
+                      width: 50%;
+                      display: flex;
+                      flex-direction: column;
+                      align-content: stretch;
+                      flex-wrap: wrap;
+                      justify-content: flex-start;
+                      align-items: flex-start;
+                      padding-left: 30px;
+                      overflow: overlay;
+                      label, h4{
+                        margin-right: 10px;
                       }
-                      article{
-                        height: 40%;
+                      input{
+                        margin-bottom: 7px;
+                      }
+                      span{
                         width: 100%;
+                        margin: 2px;
+                      }
+                      h3, span > h3 {
+                        background: grey;
+                        color: black;
+                        padding: 6px;
+                        width: 85%;
                       }
                     }
+
+                    .page2 {
+                      display: flex;
+                      flex-direction: column;
+                      flex-wrap: wrap;
+                      align-content: flex-start;
+                      justify-content: center;
+                      overflow: overlay;
+                      
+                      span {
+                        width: 80%;
+                        display: flex;
+                        flex-direction: row;
+                        flex-wrap: wrap;
+                        align-content: center;
+                        align-items: center;
+                        justify-content: flex-start;
+                        height: 32px;
+                      }
+                      article{
+                        width: 100%;
+                      }
+                      h3, article > h3{
+                        background: grey;
+                        color: black;
+                        padding: 6px;
+                        width: 85%;
+                      }
+
+                    }
+
 
                 }
 
@@ -344,6 +451,47 @@ body {
           align-content: flex-start;
           justify-content: center;
           align-items: flex-start;
+
+          header{
+            height: 50px;
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+            flex-wrap: nowrap;
+            align-items: center;
+            justify-content: center;
+
+            span{
+              width: 100%;
+              display: flex;
+              flex-direction: row;
+              justify-content: space-around;
+              align-items: center;
+            
+
+              button{
+                font-family: arial;
+                font-weight: bold;
+                color: #14396A !important;
+                font-size: 13px;
+                text-shadow: 0px 0px 0px #8EC6FF;
+                padding: 10px 25px;
+                border: 1px solid #3866A3;
+                background: linear-gradient(to top, #63B8EE, #468CCF);
+                width: 100%;
+                &:hover{
+                    color: #14396A !important;
+                    background: #468CCF;
+                    background: linear-gradient(to top, #468CCF, #63B8EE);
+                    cursor: pointer;
+                }
+                &.clicked {
+                  background: rgb(66, 84, 131) !important;
+                  color: white !important;
+                }
+              }
+            }
+          }
       
       .clientMain {
         height: 100vh;
@@ -354,7 +502,7 @@ body {
         flex-wrap: wrap;
         justify-content: center;
         align-items: flex-start;
-        margin-top: 65px;
+        margin-top: 0px;
       }
     }
  }
@@ -566,4 +714,6 @@ input.readOnly {
   .hidden {
     display: none !important;
   }
+
+
   

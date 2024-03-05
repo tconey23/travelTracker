@@ -5,6 +5,18 @@ import * as vrbl from "./globalVariables"
 import './css/main.scss'
 import './images/turing-logo.png'
 import './images/pexels-bri-schneiter-346529.jpg'
+import './images/pexels-aleksandar-pasaric-325185.jpg'
+import './images/pexels-engin-akyurt-1435752.jpg'
+import './images/pexels-simon-berger-1323550.jpg'
+import './images/pexels-aleksandar-pasaric-325185.jpg'
+import './images/pexels-vincent-rivaud-2265876.jpg'
+import './images/pexels-sheila-condi-731217.jpg'
+import './images/pexels-max-ravier-2253821.jpg'
+import './images/pexels-pixabay-38238.jpg'
+import './images/pexels-cameron-casey-1157255.jpg'
+import './images/pexels-symeon-ekizoglou-2105937.jpg'
+import './images/compass-logo.png'
+
 import * as dom from "./domUpdate"
 import * as api from "./apiCalls"
 import { addDays } from "date-fns";
@@ -50,8 +62,9 @@ let postBooking = {
 
 vrbl.userName.value = Math.floor(Math.random() * 50)
 
+
 function readyToPost(booking, endpoint) {
-    postData(booking, endpoint)
+    api.postData(booking, endpoint)
     getData(['trips'])
     updateDOM(promiseState.singleTravelerTrips)
 }
@@ -82,7 +95,6 @@ Promise.all(promises)
     function storeCurrentUser(user) {
         promiseState.singleTraveler = getUserInfo(user)
         updateDOM(promiseState.singleTravelerTrips)
-        console.log(promiseState)
         return promiseState.singleTraveler.name
         }
 
@@ -90,6 +102,7 @@ Promise.all(promises)
         data.forEach((res) => {
           let key = Object.keys(res)
             promiseState[key] = res[key]
+            
         })
     }
 
@@ -117,6 +130,7 @@ Promise.all(promises)
             return acc
         }, [])
         promiseState.singleTravelerTrips = filterTrips
+        dom.showUserTab(promiseState)
         return filterTrips
     }
 

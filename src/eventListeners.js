@@ -4,8 +4,102 @@ import * as script from './scripts'
 
 
 function setUpListeners() {
-    vrbl.rawData.addEventListener('click', () => {
-        dom.displayRawData()
+
+    vrbl.loginPanel.addEventListener('click', (e) => {
+        switch(e.target.id){
+            case 'clientLogin': vrbl.userName.value = Math.floor(Math.random() * 50)
+                                vrbl.password.value = 'travel'
+            break;
+            case "agentLogin": vrbl.userName.value = 'agency'
+                               vrbl.password.value = 'travel'
+            break;
+        }
+    })
+
+    document.addEventListener('DOMContentLoaded', () => {
+        // setTimeout(() => {
+        //     vrbl.loginButton.dispatchEvent(new Event('click'))
+        // }, 1000);
+
+        const imageUrls = [
+            './images/pexels-bri-schneiter-346529.jpg',
+            './images/pexels-aleksandar-pasaric-325185.jpg',
+            './images/pexels-engin-akyurt-1435752.jpg',
+            './images/pexels-simon-berger-1323550.jpg',
+            './images/pexels-aleksandar-pasaric-325185.jpg',
+            './images/pexels-vincent-rivaud-2265876.jpg',
+            './images/pexels-sheila-condi-731217.jpg',
+            './images/pexels-max-ravier-2253821.jpg',
+            './images/pexels-pixabay-38238.jpg',
+            './images/pexels-cameron-casey-1157255.jpg',
+            './images/pexels-symeon-ekizoglou-2105937.jpg'
+          ];
+
+            const imgElement = document.querySelector('.landing > section > img');
+            let urlCount = imageUrls.length
+            let index = 0
+
+            let opacity = 1;
+
+            function fadeOut() {
+                if (opacity > 0) {
+                    opacity -= 0.01;
+                    imgElement.style.opacity = opacity;
+                    setTimeout(fadeOut, 1);
+                } else {
+                    newImg();
+                }
+            }
+
+            function fadeIn() {
+                if (opacity < 1) {
+                    opacity += 0.01;
+                    imgElement.style.opacity = opacity;
+                    setTimeout(fadeIn, 1);
+                } else {
+                    setTimeout(fadeOut, 7000); 
+                }
+            }
+
+            function newImg() {
+                if(!vrbl.landing.classList.contains('hidden')){
+                    if(index !== imageUrls.length -1){
+                        index++
+                        imgElement.src = imageUrls[index]
+                        setTimeout(fadeIn, 1)
+                    } else {
+                        index = 0
+                        imgElement.src = imageUrls[index]
+                        setTimeout(fadeIn, 1)
+                    }
+                }
+            }
+
+            fadeOut()
+})
+
+    vrbl.logOut.addEventListener('click', () => {
+        vrbl.userInfo.classList.toggle('hidden')
+        dom.dynamicCrossfade(vrbl.clientOverview, vrbl.landing)
+
+    })
+
+    vrbl.userTab.addEventListener('click', () => {
+        dom.showUserTab(script.promiseState)
+    })
+
+    vrbl.dashTab.addEventListener('click', (e) => {
+        e.target.classList.add('clicked')
+        vrbl.bkngTab.classList.remove('clicked')
+        dom.dynamicCrossfade(vrbl.clientInterface, vrbl.dashboard)
+        dom.resetBookingForm(e)
+    })
+
+    vrbl.bkngTab.addEventListener('click', (e) => {
+        e.target.classList.add('clicked')
+        vrbl.dashTab.classList.remove('clicked')
+        dom.dynamicCrossfade(vrbl.dashboard, vrbl.clientInterface)
+        dom.resetBookingForm(e)
     })
 
     vrbl.loginButton.addEventListener('click', () => {
@@ -30,7 +124,9 @@ function setUpListeners() {
 
     const tripEditButton = vrbl.tripModal.querySelector('button[value="edit"]');
     tripEditButton.addEventListener('click', (event) => {
+        vrbl.bookingForm.querySelector('#deleteReq').classList.remove('hidden')
         dom.editBooking(document.querySelector("#tripID").innerText)
+        vrbl.bkngTab.dispatchEvent(new Event('click'))
         vrbl.tripModal.close()
     })
 
@@ -39,10 +135,6 @@ function setUpListeners() {
     destCancelButton.addEventListener('click', (event) => {
         vrbl.destModal.close()
     })
-
-    // vrbl.travSlider.addEventListener('input', () => {
-    //     vrbl.travLabel.innerText = vrbl.travSlider.value
-    // })
 
     vrbl.submitBooking.addEventListener('click', (e) => {
         e.preventDefault()
@@ -62,7 +154,7 @@ function setUpListeners() {
         
         vrbl.bookingPg2.classList.toggle('hidden')
         vrbl.bookingForm.classList.toggle('hidden')
-        vrbl.bookingForm.reset()
+        dom.resetBookingForm(e) 
     })
 
     vrbl.bookTrip.addEventListener('click', () => {
@@ -77,7 +169,8 @@ function setUpListeners() {
 
         inputArray.forEach((input) => {
             input.classList.add('readOnly')
-            input.readOnlly = true
+            input.readOnly = true
+            input.disabled = true
             input.dispatchEvent(new Event('change'))
         })
     })

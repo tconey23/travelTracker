@@ -7,36 +7,44 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-	<title>Webpack Starter Kit</title>
+	<title>Turing Touring</title>
 </head>
 
 <body>
-	<nav class="topNav"> <img class="" src="./images/turing-logo.png" alt="turing logo">
-		<section>
-			<input type="button" value="raw data" class="rawDataButton"> </section>
+	<nav class="topNav">
+		<section> <img class="" src="./images/compass-logo.png" alt="turing touring logo">
+			<h1>Turing Touring</h1> </section>
 		<section class="currentUser">
-			<h3></h3>
-			<a></a>
+			<h3 class="userDropDown"></h3>
+			<div class="userInfo hidden">
+				<p id="id"></p>
+				<p id="name"></p>
+				<p id="travelerType"></p>
+				<p id="tripCount"></p>
+				<button class="logOut">Log Out</button>
+			</div>
 		</section>
 	</nav>
 	<main class="landing">
 		<aside class="welcomeContainer">
-			<section class="logIn">
+			<section class="logIn"> <img class="welcomeGraphic" src="./images/compass-logo.png" alt="turing touring logo">
 				<h1>Welcome</h1>
-				<div class="inputContainer">
-					<!-- <label for="userNameField">Enter User Name</label> -->
+				<div class="inputContainer"> <span><label for="clientLogin">Client Login</label><input name="clientAgent" id="clientLogin" type="radio" value="client" required checked></span> <span><label for="agentLogin">Agent Login</label><input name="clientAgent" id="agentLogin" type="radio" value="agent" required></span>
 					<input type="text" id="userNameField" placeholder="user name" value="">
 					<div class="userNames"></div>
-					<!-- <label for="passwordField">Enter Password</label> -->
 					<input type="text" id="passwordField" placeholder="password" value="travel">
 					<input type="button" class="loginButton" value="Login"> </div>
 			</section>
 		</aside>
-		<section class="graphic"> <img src="./images/pexels-bri-schneiter-346529.jpg"> </section>
+		<section class="graphic"> <img class="imageScroll" src="./images/pexels-bri-schneiter-346529.jpg" alt="turing touring logo">
+			<div class="branding"> <img class="logo" src="./images/compass-logo.png" alt="turing touring logo">
+				<h1>Turing Touring</h1> </div>
+		</section>
 	</main>
-	<main class="clientOverview">
+	<main class="clientOverview hidden">
 		<div class="tabPanel">
-			<section class="dashboardContainer clientMain hidden">
+			<header><span><button class="dashboardTab clicked">Dashboard</button><button class="bookingTab">Manage Bookings</button></span> </header>
+			<section class="dashboardContainer clientMain">
 				<section class="clientDashboard">
 					<article class="myTrips collapsible expanded">
 						<p>My trips</p>
@@ -55,11 +63,11 @@
 							</table>
 						</div>
 					</div>
-					<article class="totalSpent collapsible">
+					<article class="totalSpent collapsible expanded">
 						<p>Total spent</p>
 						<p>&#x257F;</p>
 					</article>
-					<div id="totalSpent" class="spentList collapsed">
+					<div id="totalSpent" class="spentList">
 						<div class="table">
 							<table>
 								<tbody id="dataDump" class="costData approved">
@@ -85,22 +93,24 @@
 						<aside>
 							<div>
 								<h3 class="bookTrip">-Book your next trip-</h3>
-								<h3 class="bookTrip">-Edit pending trips-</h3> </div>
+								<!-- <h3 class="bookTrip">-Edit pending trips-</h3>  --></div>
 						</aside>
 						<form class="bookingForm">
 							<h3>Traveler Details</h3>
 							<label>Traveler ID*</label> <span><input id="travelerID" type="text" class="" required><label for="travelerID"></label></span>
 							<label>Traveler Name*</label> <span><input id="firstName" type="text" class="" placeholder="First Name" required><label for="firstName"></label></span> <span><input id="lastName" type="text" class="" placeholder="Last Name" required><label for="lastName"></label></span> <span><h3>Trip Details</h3><label class="editLabel hidden">Editing booking number: </label></span>
 							<label>Destination*</label>
-							<input id="edit" value="new" class="dataField editFlag hidden" type="text"> <span><input id="dest" type="search" required><input id="destName" class="dataField hidden"><input id="destID" class="dataField hidden"><input id="destFlight" class="dataField hidden"><input id="destLodging" class="dataField hidden"></span> <span class="dateSpan"><label>Date of Departure*</label>
+							<input id="edit" value="new" class="dataField editFlag hidden" type="text"> <span><input id="dest" type="search" required><input id="destName" class="dataField hidden"><input id="destID" class="dataField hidden"><input id="destFlight" class="dataField hidden"><input id="destLodging" class="dataField hidden"></span> <span class="dateSpan">
+								<label>Date of Departure*</label>
 								<input id="depDate" type="date" required>
+								<br>
 								<label>Date of Return*</label>
 								<input id="retDate" type="date" class="readOnly" required readonly disabled>
 								<input id="duration" class="hidden">
-								</span>
+							</span>
 							<p class="tripDur">Trip duration: </p>
 							<label>Number of travelers*</label> <span><input class="range" id="numTravelers" type="number" min="1" max="10" value="1" step="1" list="travSelect" required><p class="travCount"></p></span>
-							<label>Include Lodging?*</label> <span><input name="lodging" id="lodgingTrue" type="radio" value="true" required><label for="lodgingTrue">Yes</label><input id="lodging" for="lodgingTrue" class="dataField hidden"></span> <span><input name="lodging" id="lodgingFalse" type="radio" value="false" required><label for="lodgingFalse">No</label></span> <span><input id="createReq" type="submit" value="Create Booking"><input id="deleteReq" type="submit" value="Delete Booking"></span>
+							<label>Include Lodging?*</label> <span><input name="lodging" id="lodgingTrue" type="radio" value="true" required><label for="lodgingTrue">Yes</label><input id="lodging" for="lodgingTrue" class="dataField hidden"></span> <span><input name="lodging" id="lodgingFalse" type="radio" value="false" required><label for="lodgingFalse">No</label></span> <span><input id="createReq" type="submit" value="Create Booking"><input class="hidden" id="deleteReq" type="submit" value="Delete Booking"></span>
 							<!-- <input id="submit" class="hidden" type="submit"> -->
 							<dialog class="error userMessage">
 								<h3 class="userMessage"></h3> <span><button class="deleteBooking hidden">Yes</button><button class="cancel hidden">No</button></span> </dialog>
