@@ -10,10 +10,6 @@ const { addDays, format } = require('date-fns')
 function updateDOM(data, type) {
 }
 
-function displayRawData() {
-    vrbl.rawDataContainer.classList.toggle('hidden')
-}
-
 function userLogin() {
     if(vrbl.userName && vrbl.password.value === 'travel'){
         dynamicCrossfade(vrbl.landing, vrbl.clientOverview)
@@ -24,23 +20,6 @@ function userLogin() {
     
 }
 
-function userDropDown(text) {
-    const len = text.length
-        
-    document.querySelector('.userNames').innerHTML = ""
-    
-    if(len > 0){
-        vrbl.travelers.data.forEach((traveler) => {
-        let user = traveler.name.toLowerCase().slice(0, len)
-            if(user === text){
-                vrbl.userList.innerHTML += `<option class="user" value="Traveler${traveler.id}">${traveler.name}</option>`
-            }
-        })
-    }
-        vrbl.userList.classList.remove('hidden')
-
-}
-
 function selectedUser(e) {
     vrbl.userName.value = e.target.value
     vrbl.password.value = "travel"
@@ -48,10 +27,8 @@ function selectedUser(e) {
 }
 
 function updateUserInfo(user) {
-    // console.log(user)
     vrbl.currUserName.innerText = script.storeCurrentUser(user)
     displayTrips(script.updateUserTrips(user))
-    displayTripCost(script.updateUserTrips(user))
 }
 
 
@@ -64,131 +41,78 @@ function toggleCollapsible(e) {
         e.target.classList.toggle('expanded')
 }
 
-function displayTrips(data) {
-    data.forEach((trip) => {
-        const newLink = document.createElement('p');
-        newLink.textContent = `${trip.dest} \u21d7`;
-        newLink.value = trip.dest
-        newLink.depDate = trip.depDate
-        newLink.id = trip.tripID
-        newLink.addEventListener('click', (e) => {
-            showTripDetails(e.target.value, e.target.depDate, e.target.id, vrbl.tripInfo, e)
-        });
-
-        const newCell = document.createElement('td');
-        newCell.appendChild(newLink);
-
-        const dateCell = document.createElement('td');
-        dateCell.textContent = trip.depDate;
-
-        const statusCell = document.createElement('td')
-        statusCell.textContent = trip.status;
-
-        // const imgCell = document.createElement('td');
-        // const img = document.createElement('img');
-        // img.src = trip.photo;
-        // imgCell.appendChild(img);
-
-        const newTripElement = document.createElement('tr');
-        newTripElement.appendChild(newCell);
-        newTripElement.appendChild(dateCell);
-        newTripElement.appendChild(statusCell);
-        // newTripElement.appendChild(imgCell);
-
-        vrbl.tripData.appendChild(newTripElement);
-    });
-}
 
 let approvedSum
 let pendingSum
 
-function separateCostByType(type, trip) {
-    let inputTable = document.querySelector(`.${type}`);
-    const newLink = document.createElement('p');
-    newLink.textContent = `${trip.dest} \u21d7`;
-    newLink.value = trip.dest
-    newLink.depDate = trip.depDate
-    newLink.id = trip.tripID
-    newLink.addEventListener('click', (e) => {
-        showTripDetails(e.target.value, e.target.depDate, e.target.id, vrbl.costInfo,e)
-    });
+function displayTrips(trip) {
+let totalCost = 0
+let inputTable = vrbl.costData
+let tripCol = ['tripID','dest','depDate', 'status', 'flightCost', 'lodgingCost']
+let tableRow = ''
 
-    const newCell = document.createElement('td');
-    newCell.appendChild(newLink);
-
-    const dateCell = document.createElement('td');
-    dateCell.textContent = trip.depDate;
-
-    const flightCostCell = document.createElement('td');
-    flightCostCell.textContent = trip.flightCost;
-
-    const lodgingCostCell = document.createElement('td');
-    lodgingCostCell.textContent = trip.lodgingCost;
-
-    const statusCell = document.createElement('td')
-    statusCell.textContent = trip.status;
-
-    const totalCost = (trip.flightCost + trip.lodgingCost * 1.10).toFixed(2);
-
-    const updatedCosts = splitCost(type, pendingSum, approvedSum, totalCost);
-    approvedSum = updatedCosts[1]; // Update approvedSum with the returned value
-    pendingSum = updatedCosts[0]; // Update pendingSum with the returned value
-
-    const totalCostCell = document.createElement('td');
-    totalCostCell.textContent = totalCost;
-
-    const newTripElement = document.createElement('tr');
-    newTripElement.appendChild(newCell);
-    newTripElement.appendChild(dateCell);
-    newTripElement.appendChild(flightCostCell);
-    newTripElement.appendChild(lodgingCostCell);
-    newTripElement.appendChild(totalCostCell);
-    newTripElement.appendChild(statusCell);
-
-    inputTable.appendChild(newTripElement);
-
-    vrbl.approvedCost.innerText = `Total approved cost ${approvedSum.toFixed(2)}`;
-    vrbl.pendingCost.innerText = `Total pending cost ${pendingSum.toFixed(2)}`;
+trip.forEach((t)=> {
+        totalCost = ((t.flightCost + t.lodgingCost) * 1.10).toFixed(2)
+        tripCol.forEach((c) => {
+            if(c.includes('Cost')){
+                tableRow += `<td id="${t.tripID}">$${t[c]}</td>`
+            } else {
+            tableRow += `<td id="${t.tripID}">${t[c]}</td>`
+            }
+        })
+        inputTable.innerHTML += `<tr id="${t.tripID}">${tableRow}<td id="${t.tripID}">$${totalCost}</td></tr>`
+        tableRow = ''
+        
+})
+getCost()
 }
 
-function splitCost(type, currPending, currApproved, addAmount) {
-    let approvedSum = currApproved;
-    let pendingSum = currPending;
+let approvedCost = 0;
+let pendingCost = 0;
 
-    switch (type) {
+function splitCost(status, amount) {
+    switch(status) {
         case 'approved':
-            approvedSum += parseFloat(addAmount);
+            approvedCost += parseFloat(amount);
             break;
 
         case 'pending':
-            pendingSum += parseFloat(addAmount);
+            pendingCost += parseFloat(amount);
             break;
     }
-
-
-    return [pendingSum, approvedSum];
 }
 
-function displayTripCost(data) {
-pendingSum = 0
-approvedSum = 0
+function getCost() {
+    vrbl.costData.querySelectorAll('tr').forEach((row) => {
+        if(row.querySelector('td:nth-child(4)')){
+        const status = row.querySelector('td:nth-child(4)').textContent;
+        const total = row.querySelector('td:nth-child(7)').textContent.replace('$', '').replace(',', ''); 
+        splitCost(status, total);
+        }
+    });
 
-    data.forEach((trip) => {
-        separateCostByType(trip.status, trip)
-    })
+    vrbl.clientMain.querySelector('.approvedCost > p').innerText = approvedCost.toFixed(2); 
+    vrbl.clientMain.querySelector('.pendingCost > p').innerText = pendingCost.toFixed(2); 
+    evt.tripLinks()
 }
 
-function showTripDetails(trip, depDate, tripID, contName, e) {
-    vrbl.tripName.innerText = trip
-    vrbl.tripDate.innerText = depDate
-    findTripDetails(tripID, contName)
+
+function showTripDetails(trip) {
+
+   const fields = vrbl.tripInfo.querySelectorAll('table > tbody > tr > th > p')
+    vrbl.tripName.textContent = trip['dest']
+    vrbl.tripDate.textContent = trip['depDate']
+   fields.forEach((fld) => {
+    const detail = trip[`${fld.id}`]
+    fld.textContent = detail
+   })
+
     vrbl.tripModal.showModal()
 }
 
 function findTripDetails(tripID, contName) {
   let userTrips = script.promiseState.singleTravelerTrips
     const thisTrip = userTrips.find((trip) => trip.tripID == tripID)
-    // console.log(tripID)
     Object.values(vrbl.tripModal.querySelectorAll('p')).forEach((elem) => {
         elem.innerText=""
         Object.entries(thisTrip).forEach((item) => {
@@ -225,7 +149,6 @@ function displayDestinations(sortBy) {
                 vrbl.destLodging.value = `${dest.estimatedLodgingCostPerDay}`
                 vrbl.searchDest.dispatchEvent(new Event('change'))
                 vrbl.destModal.close()
-                console.log(vrbl.destID.value,vrbl.destFlight.value,vrbl.destLodging.value)
             })
             tableRow.appendChild(tableData);
         });
@@ -289,29 +212,32 @@ function displayDuration(e) {
     vrbl.bookingForm.querySelector('#duration').dispatchEvent(new Event('change'))
 }
 
-function bookingFormPg2 () {
-    const detailFields = vrbl.bookingPg2.getElementsByTagName('h4')
-    const flightCost = vrbl.bookingPg2.querySelector('#destFlight')
-    const lodgingCost = vrbl.bookingPg2.querySelector('#destLodging')
-    const totalCost = vrbl.bookingPg2.querySelector('#totalCost')
+function bookingFormPg2 (booking, type) {
+    const pageOne = vrbl.bookingForm.querySelectorAll('* > input')
+    const pageTwo = vrbl.bookingPg2.querySelectorAll('* > h4')
 
-    const lodging = script.booking.destLodging * script.booking.numTravelers
-    const flight = script.booking.destFlight * script.booking.duration
-
-    lodgingCost.innerText = ''
-    flightCost.innerText = ''
-    totalCost.innerText = ''
-
-    console.log(script.booking)
-    Array.from(detailFields).forEach((field) => {
-        field.innerText = script.booking[field.id]
+    pageTwo.forEach((fld) => {
+        pageOne.forEach((input) => {
+            if(input.id === fld.id){
+                fld.textContent = input.value
+            }
+        })
     })
-    flightCost.innerText += `$${flight}`
-    if(script.booking.lodging){
-        lodgingCost.innerText += `$${lodging}`
-    }
 
-    totalCost.innerText += `$${((lodging+flight)*1.10).toFixed(2)}`
+    vrbl.bookingPg2.querySelector('#duration').textContent = `${booking.duration}`
+    
+    if(vrbl.bookingForm.querySelector('#lodgingTrue').checked){
+        vrbl.bookingPg2.querySelector('#lodging').textContent = 'YES'
+    } else {
+        vrbl.bookingPg2.querySelector('#lodging').textContent = 'NO'
+    }
+    
+    vrbl.bookingPg2.querySelector('#destFlight').textContent = booking.flightCost
+    vrbl.bookingPg2.querySelector('#destLodging').textContent = booking.lodgingCost
+    vrbl.bookingPg2.querySelector('#totalCost').textContent = (booking.flightCost + booking.lodgingCost) * 1.10
+
+    booking['id'] = vrbl.bookingForm.querySelector('#travelerID').value
+    booking['destinationID'] = script.promiseState.destinations.find((dest) => dest['destination'] === booking.dest)['id']
 }
 
 function showUserMsg(msg) {
@@ -325,55 +251,32 @@ function showUserMsg(msg) {
 
 
 
-function editBooking(tripID) {
+function editBooking(booking) {
+    
     vrbl.bookingForm.reset()
-    const userData = script.promiseState.singleTraveler
-    const tripData = script.promiseState.singleTravelerTrips.filter((trip) => trip.tripID == tripID)
+    const user = script.promiseState.singleTraveler
+    const pgOne = vrbl.bookingForm
+    const firstName = user['name'].split(' ')[0]
+    const lastName = user['name'].split(' ')[1]
+    const depart = format(booking.depDate, 'yyyy-MM-dd')
+    const departDt = new Date(depart)
+    const duration = parseInt(booking.duration.split(' ')[0], 10)
+    const returnDt = addDays(departDt, duration)
 
-    const input = Array.from(vrbl.bookingForm.querySelectorAll('* > input'))
-    const retDate = vrbl.bookingForm.querySelector('#retDate')
-   
-    input.reduce((acc, fld) => {
-
-        input[acc].value = convertKeys(input[acc].id, input[acc])
-        acc++
-        return acc
-    }, 0)
-
-    function convertKeys(input, inputField) {
-        switch(input) {
-            case 'travelerID': return userData.id
-            break;
-            case 'firstName' : return userData.name.split(' ')[0]
-            break;
-            case 'lastName' : return userData.name.split(' ')[1]
-            break;
-            case 'edit' : return 'edit'
-            break;
-            case 'dest' :      return tripData[0].dest.split(',')[0]
-            break;
-            case 'depDate' : return format(tripData[0].depDate, 'yyyy-MM-dd')
-            break;
-            case 'retDate' :    let date = new Date(format(tripData[0].depDate, 'yyyy-MM-dd'))
-                                let duration = parseInt(tripData[0].duration.split('')[0])
-                                let daySum = addDays(date, duration)
-                                return format(daySum, 'yyyy-MM-dd') 
-            break;
-            case 'numTravelers' : return tripData[0].numTravelers
-            break;
-            case 'lodgingTrue' :  if(tripData[0].lodgingCost > 0){inputField.checked = true} else {inputField.checked = true}
-            break;
-            case 'createReq' :  return 'Update booking'
-            break;
-            case 'deleteReq' :  return 'Delete booking'
-            break;
-        }
-    }
-
-        vrbl.bookingForm.querySelector('.editLabel').classList.toggle('hidden')
-        vrbl.bookingForm.querySelector('.editLabel').innerText = `Editing booking number: ${tripData[0].tripID}`
-        vrbl.tripDur.innerText = `Trip duration: ${tripData[0].duration}`
-
+    pgOne.querySelector('#travelerID').value = user['id']
+    pgOne.querySelector('#firstName').value = firstName
+    pgOne.querySelector('#lastName').value = lastName
+    pgOne.querySelector('#dest').value = booking.dest.split(',')[0]
+    pgOne.querySelector('#destName').value = booking.dest
+    pgOne.querySelector('#destFlight').value = booking.flightCost
+    pgOne.querySelector('#destLodging').value = booking.lodgingCost
+    pgOne.querySelector('#depDate').value = format(booking.depDate, 'yyyy-MM-dd')
+    pgOne.querySelector('#retDate').value = format(returnDt, 'yyyy-MM-dd')
+    pgOne.querySelector('.tripDur').textContent = `Trip duration: ${booking.duration}`
+    pgOne.querySelector('#numTravelers').value = booking.numTravelers
+    if(booking.lodgingCost) {pgOne.querySelector('#lodgingTrue').checked = true} else {pgOne.querySelector('#lodgingFalse').checked = true}
+    
+    vrbl.nextButton.value = 'Update booking'
 }
 
 function confirmDelete(msg) {
@@ -399,7 +302,7 @@ function resetBookingForm(e) {
 }
 
 function showUserTab(user) {
-    const fields = vrbl.userInfo.querySelectorAll('p')
+    const fields = vrbl.userDetails.querySelectorAll('p')
     const userData = {
         id: user.singleTraveler.id,
         name: user.singleTraveler.name,
@@ -414,13 +317,10 @@ function showUserTab(user) {
               }
             })
         })
-
-        vrbl.userInfo.classList.toggle('hidden')
 }
 
 function dynamicCrossfade(startEl, endEl) {
     let opacity = 1;
-    console.log(endEl)
     fadeOut(startEl);
 
     function fadeOut(startEl) {
@@ -449,9 +349,7 @@ function dynamicCrossfade(startEl, endEl) {
 
 export {
     updateDOM,
-    displayRawData,
-    userLogin, 
-    userDropDown,
+    userLogin,
     selectedUser,
     toggleCollapsible,
     displayTrips,
@@ -464,6 +362,7 @@ export {
     confirmDelete,
     resetBookingForm,
     dynamicCrossfade,
-    showUserTab
+    showUserTab,
+    showTripDetails
 }
 

@@ -1,7 +1,7 @@
 import * as vrbl from "./globalVariables"
 import * as dom from "./domUpdate"
 import * as script from './scripts'
-
+const { addDays, format } = require('date-fns')
 
 function setUpListeners() {
 
@@ -79,13 +79,13 @@ function setUpListeners() {
 })
 
     vrbl.logOut.addEventListener('click', () => {
-        vrbl.userInfo.classList.toggle('hidden')
+        vrbl.userDetails.classList.add('hidden')
         dom.dynamicCrossfade(vrbl.clientOverview, vrbl.landing)
-
     })
 
     vrbl.userTab.addEventListener('click', () => {
         dom.showUserTab(script.promiseState)
+        vrbl.userDetails.classList.toggle('hidden')
     })
 
     vrbl.dashTab.addEventListener('click', (e) => {
@@ -103,6 +103,7 @@ function setUpListeners() {
     })
 
     vrbl.loginButton.addEventListener('click', () => {
+        console.log(script.promiseState)
         dom.userLogin()
     })
 
@@ -125,8 +126,8 @@ function setUpListeners() {
     const tripEditButton = vrbl.tripModal.querySelector('button[value="edit"]');
     tripEditButton.addEventListener('click', (event) => {
         vrbl.bookingForm.querySelector('#deleteReq').classList.remove('hidden')
-        dom.editBooking(document.querySelector("#tripID").innerText)
         vrbl.bkngTab.dispatchEvent(new Event('click'))
+        dom.editBooking(script.promiseState.displayedBooking)
         vrbl.tripModal.close()
     })
 
@@ -138,19 +139,26 @@ function setUpListeners() {
 
     vrbl.submitBooking.addEventListener('click', (e) => {
         e.preventDefault()
-
-        let formattedDate = script.booking.depDate.split('-')
-        formattedDate = `${formattedDate[0]}/${formattedDate[1]}/${formattedDate[2]}`
+        let booking
+        if(script.booking.depDate){
+            booking = script.booking
+        } else {
+            booking = script.promiseState.displayedBooking
+        }
+        let formattedDate = format(booking.depDate, 'yyyy/MM/dd')
         
         script.postBooking['id'] = script.promiseState.trips.length +1
-        script.postBooking['userID'] = script.booking.travelerID
-        script.postBooking['destinationID'] = parseInt(script.booking.destID)
-        script.postBooking['travelers'] = script.booking.numTravelers
+        script.postBooking['userID'] = booking.id
+        script.postBooking['destinationID'] = parseInt(booking.destinationID)
+        script.postBooking['travelers'] = booking.numTravelers
         script.postBooking['date'] = formattedDate
-        script.postBooking['duration'] = script.booking.duration
+        script.postBooking['duration'] = booking.duration
         script.postBooking['status'] = 'pending'
         script.postBooking['suggestedActivities'] = 'unknown'
-        script.readyToPost(script.postBooking,'http://localhost:3001/api/v1/trips')
+
+        if(vrbl.submitBooking.classList.contains('update')){
+            script.readyToPost(script.postBooking,'http://localhost:3001/api/v1/trips')
+        } 
         
         vrbl.bookingPg2.classList.toggle('hidden')
         vrbl.bookingForm.classList.toggle('hidden')
@@ -191,35 +199,22 @@ function setUpListeners() {
         secondaryListeners()
     })
 
-    vrbl.bookingFormInputs.forEach((input)=> {
-        input.addEventListener('change', (e) => {
-            script.booking[e.target.id] = e.target.value
-        })
-    })
-
     vrbl.nextButton.addEventListener('click', (e) => { 
         e.preventDefault()
-        let inputArray = [vrbl.destID, vrbl.destFlight, vrbl.destLodging, vrbl.travelerID, vrbl.firstName, vrbl.lastName, vrbl.searchDest, vrbl.depDate, vrbl.retDate, vrbl.numTrav, vrbl.lodgingNeeded]
-        let reqCount = 0
-        inputArray.forEach((input) => {
-            if(!input.value){
-                console.log(input)
-                input.style.border = '1px solid red'
-            } else {
-                reqCount ++
-                input.style.border = '1px solid #e5e5e5'
+
+        if(vrbl.nextButton.value === 'Update booking'){
+            console.log(script.promiseState.displayedBooking)
+            dom.dynamicCrossfade(vrbl.bookingForm, vrbl.bookingPg2)
+            dom.bookingFormPg2(script.promiseState.displayedBooking, 'update')
+            vrbl.submitBooking.classList.add('update')
+        } else {
+            dom.dynamicCrossfade(vrbl.bookingForm, vrbl.bookingPg2)
+            const pageOne = vrbl.bookingForm.querySelectorAll('* > input')
+            pageOne.forEach((input) => {
                 script.booking[input.id] = input.value
-            }
-        })
-
-        if(reqCount == 11){
-            script.booking.bookingID = "pending"
-            dom.bookingFormPg2()
-            vrbl.bookingForm.classList.toggle('hidden')
-            vrbl.bookingPg2.classList.toggle('hidden')
+            })
+            vrbl.submitBooking.classList.add('create')
         }
-
-        console.log(script.booking)
 
     })
 
@@ -237,8 +232,7 @@ function setUpListeners() {
 
     vrbl.returnButton.addEventListener('click', (e) => {
         e.preventDefault()
-        vrbl.bookingForm.classList.toggle('hidden')
-        vrbl.bookingPg2.classList.toggle('hidden')
+        dom.dynamicCrossfade(vrbl.bookingPg2, vrbl.bookingForm)
     })
 
     vrbl.bookingForm.querySelector('#deleteReq').addEventListener('click', (event) => {
@@ -287,14 +281,17 @@ function secondaryListeners(){
 }
 
 function tripLinks(){
-    vrbl.tripLinks.forEach((link) => {
-        console.log(link)
-        link.addEventListener('click', (e) => {
-            console.log(e.target)
-        })
+    vrbl.costData.querySelectorAll('tr').forEach((row) => {
+        if(!row.classList.contains('tableHeader')){
+            row.addEventListener('click', (e) => {
+               const thisTrip = script.promiseState.singleTravelerTrips.find((trip) => trip['tripID'] === parseInt(e.target.id))
+               script.promiseState.displayedBooking = thisTrip
+               dom.showTripDetails(thisTrip)
+            })
+         }
     })
 }
 
-export { setUpListeners, secondaryListeners, }
+export { setUpListeners, secondaryListeners, tripLinks}
 
 

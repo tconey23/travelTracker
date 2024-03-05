@@ -16,7 +16,7 @@
 			<h1>Turing Touring</h1> </section>
 		<section class="currentUser">
 			<h3 class="userDropDown"></h3>
-			<div class="userInfo hidden">
+			<div class="userDetails hidden">
 				<p id="id"></p>
 				<p id="name"></p>
 				<p id="travelerType"></p>
@@ -46,46 +46,31 @@
 			<header><span><button class="dashboardTab clicked">Dashboard</button><button class="bookingTab">Manage Bookings</button></span> </header>
 			<section class="dashboardContainer clientMain">
 				<section class="clientDashboard">
-					<article class="myTrips collapsible expanded">
-						<p>My trips</p>
-						<p>&#x257F;</p>
-					</article>
-					<div id="myTrips" class="tripList">
-						<div class="table">
-							<table>
-								<tbody id="dataDump" class="tripData">
-									<tr class="tableHeader">
-										<th>Destination</th>
-										<th>Trip Date</th>
-										<th>Status</th>
-									</tr>
-								</tbody>
-							</table>
-						</div>
-					</div>
 					<article class="totalSpent collapsible expanded">
 						<p>Total spent</p>
 						<p>&#x257F;</p>
 					</article>
-					<div id="totalSpent" class="spentList">
+					<div id="totalSpent" class="tripList">
 						<div class="table">
 							<table>
 								<tbody id="dataDump" class="costData approved">
 									<tr class="tableHeader">
+										<th>Trip ID</th>
 										<th>Destination</th>
 										<th>Trip Date</th>
+										<th>Status</th>
 										<th>Flight Cost</th>
 										<th>Lodging Cost</th>
 										<th title="Includes 10% Agent Fee">Total Cost<sup>*</sup></th>
-										<th>Status</th>
 									</tr>
 								</tbody>
-								<tbody id="dataDump" class="costData pending"> </tbody>
 							</table>
 						</div>
-						<h3 class="totalCost approved"></h3>
-						<h3 class="totalCost pending"></h3> </div>
+
+					</div>
 				</section>
+				<h3 class="totalCost approvedCost">Approved Cost: $<p></p></h3>
+				<h3 class="totalCost pendingCost">Pending Cost: $<p></p></h3> 
 			</section>
 			<section class="interfaceContainer clientMain hidden">
 				<section class="clientInteraction">

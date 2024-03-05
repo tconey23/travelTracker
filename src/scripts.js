@@ -30,16 +30,17 @@ promiseState = {
     trips: null,
     destinations: null,
     singleTravelerTrips: null,
+    displayedBooking: null
 }
 
 let booking = {
-    travelerID: null,
+    id: null,
     bookingID: null,
     firstName: null,
     lastName: null,
     dest: null,
     destName: null,
-    destID: null,
+    destinationID: null,
     depDate: null,
     retDate: null,
     duration: null,
