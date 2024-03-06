@@ -1,7 +1,6 @@
 import { updateDOM } from './domUpdate'
 import { setUpListeners } from './eventListeners';
 import * as vrbl from "./globalVariables"
-// import './css/styles.css';
 import './css/main.scss'
 import './images/turing-logo.png'
 import './images/pexels-bri-schneiter-346529.jpg'
@@ -106,8 +105,7 @@ Promise.all(promises)
     }
 
     function updateUserTrips(user) {
-
-        console.log(user)
+        console.log(promiseState)
         const filterTrips = promiseState.trips.reduce((acc, trip) => {
             if(trip.userID == user){
                 const flightCost = getTripCost(trip.destinationID, trip.travelers, 'flight');
@@ -122,7 +120,6 @@ Promise.all(promises)
                     ['duration']: `${trip.duration}`,
                     ['status']: trip.status,
                     ['photo']: getDestination(trip.destinationID, 'photo'),
-                    ['suggActivities']: promiseState.singleTraveler.travelerType,
                     ['flightCost']: flightCost,
                     ['lodgingCost']: lodgingCost,
                     ['totalCost']: totalCost
@@ -177,14 +174,8 @@ Promise.all(promises)
         })
     }
 
-    function deleteBooking(tripID) {
-        let id = tripID.split(': ')[1]
-        api.deleteData(`http://localhost:3001/api/v1/trips/${id}`)
-    }
-
-
-
 export {
+    getUserInfo,
     promiseState,
     updateUserTrips,
     storeCurrentUser,
@@ -192,7 +183,6 @@ export {
     booking,
     postBooking,
     readyToPost,
-    deleteBooking,
     getData
 }
 

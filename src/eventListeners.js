@@ -212,26 +212,10 @@ function setUpListeners() {
         dom.dynamicCrossfade(vrbl.bookingPg2, vrbl.bookingForm)
     })
 
-    vrbl.bookingForm.querySelector('#deleteReq').addEventListener('click', (event) => {
-        event.preventDefault()
-        dom.confirmDelete('Are you sure you want to delete this booking?')
-    })
-
     vrbl.userMsg.querySelector('.cancel').addEventListener('click', (e) => {
         e.preventDefault()
         vrbl.userMsg.querySelector('.cancel').classList.toggle('hidden')
         vrbl.userMsg.querySelector('.deleteBooking').classList.toggle('hidden')
-        vrbl.userMsg.close()
-    })
-
-    vrbl.userMsg.querySelector('.deleteBooking').addEventListener('click', (e) => {
-        e.preventDefault()
-        vrbl.userMsg.querySelector('.cancel').classList.toggle('hidden')
-        vrbl.userMsg.querySelector('.deleteBooking').classList.toggle('hidden')
-        script.deleteBooking(vrbl.bookingForm.querySelector('.editLabel').innerText)
-        vrbl.bookingForm.querySelector('.tripDur').innerText = 'Trip duration: '
-        vrbl.bookingForm.querySelector('.editLabel').classList.add('hidden')
-        vrbl.bookingForm.reset()
         vrbl.userMsg.close()
     })
 }

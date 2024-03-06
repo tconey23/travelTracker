@@ -4,11 +4,6 @@ import * as script from "./scripts"
 import * as evt from "./eventListeners"
 const { differenceInDays } = require('date-fns')
 const { addDays, format } = require('date-fns')
-// import * as map from "./map"
-
-
-function updateDOM(data, type) {
-}
 
 function userLogin() {
     if(vrbl.userName && vrbl.password.value === 'travel'){
@@ -268,13 +263,6 @@ function showUserMsg(msg) {
     }, 2500);
 }
 
-function confirmDelete(msg) {
-    vrbl.userMsg.querySelector('h3').innerText = msg
-    vrbl.userMsg.querySelector('.deleteBooking').classList.toggle('hidden')
-    vrbl.userMsg.querySelector('.cancel').classList.toggle('hidden')
-    vrbl.userMsg.show()
-}
-
 function resetBookingForm(e) {
 
     let inputArray = [vrbl.travelerID, vrbl.firstName, vrbl.lastName]
@@ -343,7 +331,6 @@ function dynamicCrossfade(startEl, endEl) {
 }
 
 export {
-    updateDOM,
     userLogin,
     selectedUser,
     toggleCollapsible,
@@ -353,7 +340,6 @@ export {
     displayDuration,
     bookingFormPg2,
     showUserMsg,
-    confirmDelete,
     resetBookingForm,
     dynamicCrossfade,
     showUserTab,
