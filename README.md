@@ -41,4 +41,21 @@ The following were used for this project
 - Figuring out how to crossfade transitions between different menus etc.
 - Becoming much more comfortable with FETCH methods including POST, DELETE and GET
 
+##Application Set Up
+
+### Front End
+Fork this repository
+Clone your own local version of the repository
+CD into the directory and run npm install to install project dependencies
+Run npm start to start the server
+
+###Back End
+In order for the data to be available to the application. You also need to install the local backend server.
+To do so clone the respository [here](https://github.com/turingschool-examples/travel-tracker-api)
+CD into the directory and install dependencies with npm install
+To start the server, run NPM start in a separate terminal in your project
+Open the local server http://localhost:8080/ in your web browser
+
+In order to login, you may select a client number from 1 to 50 
+The passowrd to login is 'travel'
 
