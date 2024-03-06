@@ -41,5 +41,4 @@ The following were used for this project
 - Figuring out how to crossfade transitions between different menus etc.
 - Becoming much more comfortable with FETCH methods including POST, DELETE and GET
 
-- 
 
