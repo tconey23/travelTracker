@@ -1,17 +1,27 @@
-import { fetchData } from './APICalls';
-import { dataDump } from './globalVariables';
 import { updateDOM } from './domUpdate'
 import { setUpListeners } from './eventListeners';
 import * as vrbl from "./globalVariables"
-// This is the JavaScript entry file - your code begins here
-// Do not delete or rename this file ********
-
-// An example of how you tell webpack to use a CSS (SCSS) file
-import './css/styles.css';
-
-// An example of how you tell webpack to use an image (also need to link to it in the index.html)
+// import './css/styles.css';
+import './css/main.scss'
 import './images/turing-logo.png'
-let cost = []
+import './images/pexels-bri-schneiter-346529.jpg'
+import './images/pexels-aleksandar-pasaric-325185.jpg'
+import './images/pexels-engin-akyurt-1435752.jpg'
+import './images/pexels-simon-berger-1323550.jpg'
+import './images/pexels-aleksandar-pasaric-325185.jpg'
+import './images/pexels-vincent-rivaud-2265876.jpg'
+import './images/pexels-sheila-condi-731217.jpg'
+import './images/pexels-max-ravier-2253821.jpg'
+import './images/pexels-pixabay-38238.jpg'
+import './images/pexels-cameron-casey-1157255.jpg'
+import './images/pexels-symeon-ekizoglou-2105937.jpg'
+import './images/compass-logo.png'
+
+import * as dom from "./domUpdate"
+import * as api from "./apiCalls"
+import { addDays } from "date-fns";
+
+getData(['travelers', 'destinations', 'trips'])
 let promiseState
 
 promiseState = {
@@ -19,46 +29,85 @@ promiseState = {
     singleTraveler: null,
     trips: null,
     destinations: null,
-    currentUser: null,
-    currentUserTrips: null,
-    currentUserSpend: null,
+    singleTravelerTrips: null,
+    displayedBooking: null
 }
 
-const argumentsArray = ['travelers', 'destinations', 'trips'];
+let booking = {
+    id: null,
+    bookingID: null,
+    firstName: null,
+    lastName: null,
+    dest: null,
+    destName: null,
+    destinationID: null,
+    depDate: null,
+    retDate: null,
+    duration: null,
+    numTravelers: null,
+    lodging: null,
+    destFlight: null,
+    destLodging: null
+}
+
+let postBooking = {
+    id: null,
+    userID: null,
+    destinationID: null,
+    travelers: null,
+    date: null,
+    duration: null,
+    status: null,
+    suggestedActivities: null
+}
+
+vrbl.userName.value = Math.floor(Math.random() * 50)
+
+
+function readyToPost(booking, endpoint) {
+    api.postData(booking, endpoint)
+    getData(['trips'])
+}
+
+
+function getData(argumentsArray) {
 
 const promises = [];
 
 argumentsArray.forEach(arg => {
-    promises.push(fetchData(arg));
+    promises.push(api.fetchData(arg));
 });
 
 
 Promise.all(promises)
     .then(results => {
         updateData(results);
+        correctCountries()
+        
     })
     .catch(error => {
         console.error(error);
     });
 
-
+}
     setUpListeners()
 
     function storeCurrentUser(user) {
-        promiseState.currentUser = getUserInfo(user)
-        updateDOM(promiseState.currentUserTrips)
-        return promiseState.currentUser.name
+        promiseState.singleTraveler = getUserInfo(user)
+        return promiseState.singleTraveler.name
         }
 
     function updateData(data) {
         data.forEach((res) => {
           let key = Object.keys(res)
             promiseState[key] = res[key]
+            
         })
-
     }
 
     function updateUserTrips(user) {
+
+        console.log(user)
         const filterTrips = promiseState.trips.reduce((acc, trip) => {
             if(trip.userID == user){
                 const flightCost = getTripCost(trip.destinationID, trip.travelers, 'flight');
@@ -68,12 +117,12 @@ Promise.all(promises)
                 acc.push({
                     ['tripID']: trip.id,
                     ['dest']: getDestination(trip.destinationID, 'name'),
-                    ['date']: trip.date,
+                    ['depDate']: trip.date,
                     ['numTravelers']: trip.travelers,
-                    ['duration']: `${trip.duration} Day(s)`,
+                    ['duration']: `${trip.duration}`,
                     ['status']: trip.status,
                     ['photo']: getDestination(trip.destinationID, 'photo'),
-                    ['suggActivities']: promiseState.currentUser.travelerType,
+                    ['suggActivities']: promiseState.singleTraveler.travelerType,
                     ['flightCost']: flightCost,
                     ['lodgingCost']: lodgingCost,
                     ['totalCost']: totalCost
@@ -81,7 +130,8 @@ Promise.all(promises)
             }
             return acc
         }, [])
-        promiseState.currentUserTrips = filterTrips
+        promiseState.singleTravelerTrips = filterTrips
+        dom.showUserTab(promiseState)
         return filterTrips
     }
 
@@ -113,6 +163,24 @@ Promise.all(promises)
         }
     }
 
+    function correctCountries() {
+        let states = ['Alaska', 'Florida', 'New York', 'California', 'Puerto Rico']
+
+        promiseState.destinations.forEach((dest)=>{
+            states.forEach((state)=> {
+                if(dest.destination.includes(state)){
+                    let city = dest.destination.split(',')[0]
+                    let state = dest.destination.split(',')[1].trim()
+                    dest.destination = `${city} (${state}), United States`
+                }
+            })
+        })
+    }
+
+    function deleteBooking(tripID) {
+        let id = tripID.split(': ')[1]
+        api.deleteData(`http://localhost:3001/api/v1/trips/${id}`)
+    }
 
 
 
@@ -120,6 +188,12 @@ export {
     promiseState,
     updateUserTrips,
     storeCurrentUser,
+    getDestination,
+    booking,
+    postBooking,
+    readyToPost,
+    deleteBooking,
+    getData
 }
 
 
