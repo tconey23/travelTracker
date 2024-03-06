@@ -308,6 +308,23 @@ body {
             }
             }
         }
+        span {
+          display: flex;
+          flex-direction: row;
+          flex-wrap: wrap;
+          justify-content: center;
+          align-items: center;
+          align-content: center;
+          h3 {
+            width: 260px;
+            margin-right: 275px;
+            display: flex;
+            flex-direction: row;
+            flex-wrap: nowrap;
+            align-items: center;
+            justify-content: space-around;
+          }
+        }
       }
 
       .interfaceContainer{

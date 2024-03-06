@@ -28,14 +28,14 @@ function selectedUser(e) {
 
 function updateUserInfo(user) {
     vrbl.currUserName.innerText = script.storeCurrentUser(user)
+    vrbl.clientMain.querySelector('.approvedCost > p').innerText = ''
+    vrbl.clientMain.querySelector('.pendingCost > p').innerText = ''
     displayTrips(script.updateUserTrips(user))
 }
 
 
 function toggleCollapsible(e) {
     if(e.target.classList.contains('totalSpent')){
-        vrbl.spentList.classList.toggle('collapsed')
-    } else{
         vrbl.tripList.classList.toggle('collapsed')
     }
         e.target.classList.toggle('expanded')
@@ -46,21 +46,28 @@ let approvedSum
 let pendingSum
 
 function displayTrips(trip) {
+
+let flightTotal
+let lodgingTotal
 let totalCost = 0
 let inputTable = vrbl.costData
-let tripCol = ['tripID','dest','depDate', 'status', 'flightCost', 'lodgingCost']
+let tripCol = ['tripID','dest','depDate', 'status', 'numTravelers', 'duration', 'flightCost', 'lodgingCost']
 let tableRow = ''
 
 trip.forEach((t)=> {
-        totalCost = ((t.flightCost + t.lodgingCost) * 1.10).toFixed(2)
+        t['flightCost'] = t['flightCost'] * t['numTravelers']
+        t['lodgingCost'] = t['lodgingCost'] * t['duration']
+         
+        totalCost = ((t['flightCost'] + t['lodgingCost']) * 1.10).toFixed(2)
+        t['totalCost'] = totalCost
         tripCol.forEach((c) => {
             if(c.includes('Cost')){
-                tableRow += `<td id="${t.tripID}">$${t[c]}</td>`
+                tableRow += `<td tabindex="0" id="${t.tripID}">$${t[c]}</td>`
             } else {
-            tableRow += `<td id="${t.tripID}">${t[c]}</td>`
+            tableRow += `<td tabindex="0" id="${t.tripID}">${t[c]}</td>`
             }
         })
-        inputTable.innerHTML += `<tr id="${t.tripID}">${tableRow}<td id="${t.tripID}">$${totalCost}</td></tr>`
+        inputTable.innerHTML += `<tr tabindex="0" id="${t.tripID}">${tableRow}<td tabindex="0" id="${t.tripID}">$${totalCost}</td></tr>`
         tableRow = ''
         
 })
@@ -71,6 +78,7 @@ let approvedCost = 0;
 let pendingCost = 0;
 
 function splitCost(status, amount) {
+
     switch(status) {
         case 'approved':
             approvedCost += parseFloat(amount);
@@ -83,10 +91,12 @@ function splitCost(status, amount) {
 }
 
 function getCost() {
+approvedCost = 0
+pendingCost = 0
     vrbl.costData.querySelectorAll('tr').forEach((row) => {
         if(row.querySelector('td:nth-child(4)')){
         const status = row.querySelector('td:nth-child(4)').textContent;
-        const total = row.querySelector('td:nth-child(7)').textContent.replace('$', '').replace(',', ''); 
+        const total = row.querySelector('td:nth-child(9)').textContent.replace('$', '').replace(',', ''); 
         splitCost(status, total);
         }
     });
@@ -212,7 +222,8 @@ function displayDuration(e) {
     vrbl.bookingForm.querySelector('#duration').dispatchEvent(new Event('change'))
 }
 
-function bookingFormPg2 (booking, type) {
+function bookingFormPg2 (booking) {
+    let lodgingCost 
     const pageOne = vrbl.bookingForm.querySelectorAll('* > input')
     const pageTwo = vrbl.bookingPg2.querySelectorAll('* > h4')
 
@@ -228,16 +239,24 @@ function bookingFormPg2 (booking, type) {
     
     if(vrbl.bookingForm.querySelector('#lodgingTrue').checked){
         vrbl.bookingPg2.querySelector('#lodging').textContent = 'YES'
+        lodgingCost = booking.destLodging * booking.duration
     } else {
         vrbl.bookingPg2.querySelector('#lodging').textContent = 'NO'
+        lodgingCost = 0
     }
-    
-    vrbl.bookingPg2.querySelector('#destFlight').textContent = booking.flightCost
-    vrbl.bookingPg2.querySelector('#destLodging').textContent = booking.lodgingCost
-    vrbl.bookingPg2.querySelector('#totalCost').textContent = (booking.flightCost + booking.lodgingCost) * 1.10
+
+    const flightCost = booking.destFlight * booking.numTravelers
+    const totalCost = flightCost + lodgingCost
+    const markup = totalCost * 1.10
+    booking[destFlight] = flightCost
+    booking[destLodging] = lodgingCost
+
+    vrbl.bookingPg2.querySelector('#destFlight').textContent = flightCost
+    vrbl.bookingPg2.querySelector('#destLodging').textContent = lodgingCost
+    vrbl.bookingPg2.querySelector('#totalCost').textContent = markup.toFixed(2)
 
     booking['id'] = vrbl.bookingForm.querySelector('#travelerID').value
-    booking['destinationID'] = script.promiseState.destinations.find((dest) => dest['destination'] === booking.dest)['id']
+    booking['destinationID'] = script.promiseState.destinations.find((dest) => dest['destination'] === booking.destName)['id']
 }
 
 function showUserMsg(msg) {
@@ -247,36 +266,6 @@ function showUserMsg(msg) {
     setTimeout(() => {
        vrbl.userMsg.close() 
     }, 2500);
-}
-
-
-
-function editBooking(booking) {
-    
-    vrbl.bookingForm.reset()
-    const user = script.promiseState.singleTraveler
-    const pgOne = vrbl.bookingForm
-    const firstName = user['name'].split(' ')[0]
-    const lastName = user['name'].split(' ')[1]
-    const depart = format(booking.depDate, 'yyyy-MM-dd')
-    const departDt = new Date(depart)
-    const duration = parseInt(booking.duration.split(' ')[0], 10)
-    const returnDt = addDays(departDt, duration)
-
-    pgOne.querySelector('#travelerID').value = user['id']
-    pgOne.querySelector('#firstName').value = firstName
-    pgOne.querySelector('#lastName').value = lastName
-    pgOne.querySelector('#dest').value = booking.dest.split(',')[0]
-    pgOne.querySelector('#destName').value = booking.dest
-    pgOne.querySelector('#destFlight').value = booking.flightCost
-    pgOne.querySelector('#destLodging').value = booking.lodgingCost
-    pgOne.querySelector('#depDate').value = format(booking.depDate, 'yyyy-MM-dd')
-    pgOne.querySelector('#retDate').value = format(returnDt, 'yyyy-MM-dd')
-    pgOne.querySelector('.tripDur').textContent = `Trip duration: ${booking.duration}`
-    pgOne.querySelector('#numTravelers').value = booking.numTravelers
-    if(booking.lodgingCost) {pgOne.querySelector('#lodgingTrue').checked = true} else {pgOne.querySelector('#lodgingFalse').checked = true}
-    
-    vrbl.nextButton.value = 'Update booking'
 }
 
 function confirmDelete(msg) {
@@ -296,7 +285,6 @@ function resetBookingForm(e) {
         input.disabled = false
     })
     vrbl.retDate.disabled = true
-
     vrbl.bookingForm.reset()
     vrbl.bookingPg2.reset()
 }
@@ -317,6 +305,13 @@ function showUserTab(user) {
               }
             })
         })
+}
+
+function updateBookings(e) {
+    clearTable(vrbl.costData)
+    updateUserInfo(script.promiseState.singleTraveler.id)
+    dynamicCrossfade(vrbl.clientInterface, vrbl.dashboard)
+    resetBookingForm(e)
 }
 
 function dynamicCrossfade(startEl, endEl) {
@@ -358,11 +353,12 @@ export {
     displayDuration,
     bookingFormPg2,
     showUserMsg,
-    editBooking,
     confirmDelete,
     resetBookingForm,
     dynamicCrossfade,
     showUserTab,
-    showTripDetails
+    showTripDetails, 
+    updateBookings,
+    clearTable
 }
 

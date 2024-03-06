@@ -67,7 +67,6 @@ vrbl.userName.value = Math.floor(Math.random() * 50)
 function readyToPost(booking, endpoint) {
     api.postData(booking, endpoint)
     getData(['trips'])
-    updateDOM(promiseState.singleTravelerTrips)
 }
 
 
@@ -95,7 +94,6 @@ Promise.all(promises)
 
     function storeCurrentUser(user) {
         promiseState.singleTraveler = getUserInfo(user)
-        updateDOM(promiseState.singleTravelerTrips)
         return promiseState.singleTraveler.name
         }
 
@@ -108,6 +106,8 @@ Promise.all(promises)
     }
 
     function updateUserTrips(user) {
+
+        console.log(user)
         const filterTrips = promiseState.trips.reduce((acc, trip) => {
             if(trip.userID == user){
                 const flightCost = getTripCost(trip.destinationID, trip.travelers, 'flight');
@@ -119,7 +119,7 @@ Promise.all(promises)
                     ['dest']: getDestination(trip.destinationID, 'name'),
                     ['depDate']: trip.date,
                     ['numTravelers']: trip.travelers,
-                    ['duration']: `${trip.duration} Day(s)`,
+                    ['duration']: `${trip.duration}`,
                     ['status']: trip.status,
                     ['photo']: getDestination(trip.destinationID, 'photo'),
                     ['suggActivities']: promiseState.singleTraveler.travelerType,
@@ -192,7 +192,8 @@ export {
     booking,
     postBooking,
     readyToPost,
-    deleteBooking
+    deleteBooking,
+    getData
 }
 
 

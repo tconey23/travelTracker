@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
 	<meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -29,7 +28,7 @@
 		<aside class="welcomeContainer">
 			<section class="logIn"> <img class="welcomeGraphic" src="./images/compass-logo.png" alt="turing touring logo">
 				<h1>Welcome</h1>
-				<div class="inputContainer"> <span><label for="clientLogin">Client Login</label><input name="clientAgent" id="clientLogin" type="radio" value="client" required checked></span> <span><label for="agentLogin">Agent Login</label><input name="clientAgent" id="agentLogin" type="radio" value="agent" required></span>
+				<div class="inputContainer"> <span><label for="clientLogin">Client Login</label><input name="clientAgent" id="clientLogin" type="radio" value="client" required checked></span>
 					<input type="text" id="userNameField" placeholder="user name" value="">
 					<div class="userNames"></div>
 					<input type="text" id="passwordField" placeholder="password" value="travel">
@@ -59,6 +58,8 @@
 										<th>Destination</th>
 										<th>Trip Date</th>
 										<th>Status</th>
+										<th>Travelers</th>
+										<th>Duration</th>
 										<th>Flight Cost</th>
 										<th>Lodging Cost</th>
 										<th title="Includes 10% Agent Fee">Total Cost<sup>*</sup></th>
@@ -69,8 +70,8 @@
 
 					</div>
 				</section>
-				<h3 class="totalCost approvedCost">Approved Cost: $<p></p></h3>
-				<h3 class="totalCost pendingCost">Pending Cost: $<p></p></h3> 
+				<span><h3 tabindex="0" class="totalCost approvedCost">Approved Cost: $<p></p></h3>
+				<h3 tabindex="0"					 class="totalCost pendingCost">Pending Cost: $<p></p></h3></span>
 			</section>
 			<section class="interfaceContainer clientMain hidden">
 				<section class="clientInteraction">
@@ -78,7 +79,6 @@
 						<aside>
 							<div>
 								<h3 class="bookTrip">-Book your next trip-</h3>
-								<!-- <h3 class="bookTrip">-Edit pending trips-</h3>  --></div>
 						</aside>
 						<form class="bookingForm">
 							<h3>Traveler Details</h3>
@@ -96,7 +96,6 @@
 							<p class="tripDur">Trip duration: </p>
 							<label>Number of travelers*</label> <span><input class="range" id="numTravelers" type="number" min="1" max="10" value="1" step="1" list="travSelect" required><p class="travCount"></p></span>
 							<label>Include Lodging?*</label> <span><input name="lodging" id="lodgingTrue" type="radio" value="true" required><label for="lodgingTrue">Yes</label><input id="lodging" for="lodgingTrue" class="dataField hidden"></span> <span><input name="lodging" id="lodgingFalse" type="radio" value="false" required><label for="lodgingFalse">No</label></span> <span><input id="createReq" type="submit" value="Create Booking"><input class="hidden" id="deleteReq" type="submit" value="Delete Booking"></span>
-							<!-- <input id="submit" class="hidden" type="submit"> -->
 							<dialog class="error userMessage">
 								<h3 class="userMessage"></h3> <span><button class="deleteBooking hidden">Yes</button><button class="cancel hidden">No</button></span> </dialog>
 						</form>
@@ -135,7 +134,7 @@
 			<div class="titleContainer">Your trip to
 				<h4 class="tripName"></h4> on
 				<h4 class="tripDate"></h4></div>
-			<div class="buttonContainer"> <span><button value="edit" formmethod="dialog">Edit Booking</button><button value="cancel" formmethod="dialog">Close</button></span> </div>
+			<div class="buttonContainer"> <span><button value="cancel" formmethod="dialog">Close</button></span> </div>
 		</header>
 		<section class="tripInfo modalInfo">
 			<table>

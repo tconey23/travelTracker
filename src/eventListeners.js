@@ -17,9 +17,6 @@ function setUpListeners() {
     })
 
     document.addEventListener('DOMContentLoaded', () => {
-        // setTimeout(() => {
-        //     vrbl.loginButton.dispatchEvent(new Event('click'))
-        // }, 1000);
 
         const imageUrls = [
             './images/pexels-bri-schneiter-346529.jpg',
@@ -91,8 +88,8 @@ function setUpListeners() {
     vrbl.dashTab.addEventListener('click', (e) => {
         e.target.classList.add('clicked')
         vrbl.bkngTab.classList.remove('clicked')
-        dom.dynamicCrossfade(vrbl.clientInterface, vrbl.dashboard)
-        dom.resetBookingForm(e)
+        script.getData(['travelers', 'destinations', 'trips'])
+        dom.updateBookings(e)
     })
 
     vrbl.bkngTab.addEventListener('click', (e) => {
@@ -107,10 +104,6 @@ function setUpListeners() {
         dom.userLogin()
     })
 
-    vrbl.userName.addEventListener('keyup', (e) => {
-        e.preventDefault()
-    })
-
     document.querySelector(".clientDashboard").addEventListener('click', (e) => {
         if(e.target.classList.contains('totalSpent') || e.target.classList.contains('myTrips')){
         dom.toggleCollapsible(e)
@@ -119,18 +112,8 @@ function setUpListeners() {
 
     const tripCancelButton = vrbl.tripModal.querySelector('button[value="cancel"]');
     tripCancelButton.addEventListener('click', (event) => {
-        
         vrbl.tripModal.close()
     })
-
-    const tripEditButton = vrbl.tripModal.querySelector('button[value="edit"]');
-    tripEditButton.addEventListener('click', (event) => {
-        vrbl.bookingForm.querySelector('#deleteReq').classList.remove('hidden')
-        vrbl.bkngTab.dispatchEvent(new Event('click'))
-        dom.editBooking(script.promiseState.displayedBooking)
-        vrbl.tripModal.close()
-    })
-
 
     const destCancelButton = vrbl.destModal.querySelector('button[value="cancel"]');
     destCancelButton.addEventListener('click', (event) => {
@@ -140,11 +123,8 @@ function setUpListeners() {
     vrbl.submitBooking.addEventListener('click', (e) => {
         e.preventDefault()
         let booking
-        if(script.booking.depDate){
-            booking = script.booking
-        } else {
-            booking = script.promiseState.displayedBooking
-        }
+         booking = script.booking
+
         let formattedDate = format(booking.depDate, 'yyyy/MM/dd')
         
         script.postBooking['id'] = script.promiseState.trips.length +1
@@ -155,13 +135,17 @@ function setUpListeners() {
         script.postBooking['duration'] = booking.duration
         script.postBooking['status'] = 'pending'
         script.postBooking['suggestedActivities'] = 'unknown'
-
-        if(vrbl.submitBooking.classList.contains('update')){
-            script.readyToPost(script.postBooking,'http://localhost:3001/api/v1/trips')
-        } 
+        script.readyToPost(script.postBooking,'http://localhost:3001/api/v1/trips')
         
-        vrbl.bookingPg2.classList.toggle('hidden')
-        vrbl.bookingForm.classList.toggle('hidden')
+
+            setTimeout(() => {
+                dom.updateUserInfo(script.promiseState.singleTraveler.id)
+                dom.displayTrips(script.promiseState.singleTravelerTrips)
+                dom.clearTable(vrbl.costData)
+                dom.displayTrips(script.promiseState.singleTravelerTrips)
+            }, 2000);
+
+        dom.dynamicCrossfade(vrbl.bookingPg2, vrbl.bookingForm)
         dom.resetBookingForm(e) 
     })
 
@@ -202,20 +186,13 @@ function setUpListeners() {
     vrbl.nextButton.addEventListener('click', (e) => { 
         e.preventDefault()
 
-        if(vrbl.nextButton.value === 'Update booking'){
-            console.log(script.promiseState.displayedBooking)
-            dom.dynamicCrossfade(vrbl.bookingForm, vrbl.bookingPg2)
-            dom.bookingFormPg2(script.promiseState.displayedBooking, 'update')
-            vrbl.submitBooking.classList.add('update')
-        } else {
             dom.dynamicCrossfade(vrbl.bookingForm, vrbl.bookingPg2)
             const pageOne = vrbl.bookingForm.querySelectorAll('* > input')
             pageOne.forEach((input) => {
                 script.booking[input.id] = input.value
             })
-            vrbl.submitBooking.classList.add('create')
-        }
-
+            dom.bookingFormPg2(script.booking)
+    
     })
 
     vrbl.bookingForm.querySelector('#lodgingTrue').addEventListener('change', () => {
