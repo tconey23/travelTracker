@@ -1,4 +1,4 @@
-export { clientMain, logOut, userDetails, userTab, clientOverview, dashTab, bkngTab, landing, userMsg, submitBooking, destName, destID, destFlight, destLodging, lodgingNeeded, nextButton, bookingPg2, returnButton, bookingForm, bookingFormInputs, destList, destModal, searchDest, travelerID, firstName, lastName, bookTrip, tripDur, retDate, depDate, travLabel, numTrav, clientInterface, costInfo, tripInfo, pendingCost, approvedCost, totalCost, costData, tripName, tripDate, tripModal, tripLinks, dashboard, tripList, spentList, totalSpent, myTrips, currUserName, password, travelers, userList, userName, loginPanel, loginButton, hidden, travelerData, tripData, destinationData, rawData, rawDataContainer }
+export { closeMap, closeModal, wikiModal, mapModal, mapButton, clientMain, logOut, userDetails, userTab, clientOverview, dashTab, bkngTab, landing, userMsg, submitBooking, destName, destID, destFlight, destLodging, lodgingNeeded, nextButton, bookingPg2, returnButton, bookingForm, bookingFormInputs, destList, destModal, searchDest, travelerID, firstName, lastName, bookTrip, tripDur, retDate, depDate, travLabel, numTrav, clientInterface, costInfo, tripInfo, pendingCost, approvedCost, totalCost, costData, tripName, tripDate, tripModal, tripLinks, dashboard, tripList, spentList, totalSpent, myTrips, currUserName, password, travelers, userList, userName, loginPanel, loginButton, hidden, travelerData, tripData, destinationData, rawData, rawDataContainer }
 
 const destName = document.querySelector("#destName")
 const destID = document.querySelector("#destID")
@@ -60,4 +60,9 @@ const userTab = document.querySelector('.userDropDown')
 const userDetails = document.querySelector('.userDetails')
 const logOut = document.querySelector('.logOut')
 const clientMain = document.querySelector('.clientMain')
+const mapButton = document.querySelector('.seeMap')
+const mapModal = document.querySelector('.mapModal')
+const wikiModal = document.querySelector('.wikiModal')
+const closeModal = document.querySelector(".closeModal")
+const closeMap = document.querySelector(".closeMap")
 const travelers = {}

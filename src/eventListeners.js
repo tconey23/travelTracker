@@ -1,6 +1,7 @@
 import * as vrbl from "./globalVariables"
 import * as dom from "./domUpdate"
 import * as script from './scripts'
+import * as api from './apiCalls'
 const {
   format
 } = require('date-fns')
@@ -183,6 +184,7 @@ function setUpListeners() {
 
   vrbl.searchDest.addEventListener('click', () => {
     dom.displayDestinations('city')
+    // vrbl.mapModal.show()
     vrbl.destModal.showModal()
     secondaryListeners()
   })
@@ -227,10 +229,32 @@ function setUpListeners() {
     vrbl.userMsg.querySelector('.deleteBooking').classList.toggle('hidden')
     vrbl.userMsg.close()
   })
+
+  vrbl.mapButton.addEventListener('click', () => {
+    secondaryListeners()
+    vrbl.mapModal.show()
+  })
+
+  vrbl.closeModal.addEventListener('click', () => {
+    vrbl.wikiModal.querySelector('iframe').src = ''
+    vrbl.wikiModal.close()
+  })
+
+  vrbl.closeMap.addEventListener('click', () => {
+    vrbl.mapModal.close()
+  })
+
 }
 
-
 function secondaryListeners() {
+
+  document.querySelectorAll('.moreInfo').forEach((btn) => {
+    console.log(btn)
+    btn.addEventListener('click', (e) => {
+      api.wikiSearch(e.target.id)
+      console.log(e.target.id)
+    })
+  })
 
 
   document.querySelectorAll('.tableHeader a').forEach((a) => {

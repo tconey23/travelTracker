@@ -1,6 +1,5 @@
-import {
-  setUpListeners
-} from './eventListeners';
+import { setUpListeners } from './eventListeners';
+import * as gmap from './maps'
 import * as vrbl from "./globalVariables"
 import './css/main.scss'
 import './images/turing-logo.png'
@@ -61,7 +60,8 @@ let postBooking = {
 }
   
 vrbl.userName.value = `traveler${Math.floor(Math.random() * 50)}`
-  
+
+
   
 function readyToPost(booking, endpoint) {
   api.postData(booking, endpoint)
@@ -82,6 +82,7 @@ function getData(argumentsArray) {
     .then(results => {
       updateData(results);
       correctCountries()
+      gmap.getDestPins()
   
     })
     .catch(error => {
@@ -172,6 +173,7 @@ function correctCountries() {
     })
   })
 }
+
   
 export {
   getUserInfo,

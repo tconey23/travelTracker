@@ -338,6 +338,19 @@ function dynamicCrossfade(startEl, endEl) {
   }
 }
 
+function getMapDest(destID) {
+  console.log(destID)
+  const dest = script.promiseState.destinations.find((destination) => destination['id'] === parseInt(destID, 10))
+  vrbl.searchDest.value = `${dest.destination}`
+  vrbl.destName.value = `${dest.destination}`
+  vrbl.destID.value = dest.id
+  vrbl.destFlight.value = `${dest.estimatedFlightCostPerPerson}`
+  vrbl.destLodging.value = `${dest.estimatedLodgingCostPerDay}`
+  vrbl.searchDest.dispatchEvent(new Event("change"))
+  vrbl.mapModal.close()
+  vrbl.bookingForm.classList.remove('hidden')
+}
+
 export {
   userLogin,
   selectedUser,
@@ -355,5 +368,6 @@ export {
   updateBookings,
   clearTable,
   findTripDetails,
-  verifyFields
+  verifyFields,
+  getMapDest
 }

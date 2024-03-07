@@ -366,6 +366,9 @@ body {
               color: #15191c;
               font-style: italic;
             }
+            &.clicked {
+              background: linear-gradient(to top, #63b8ee, #468ccf)
+            }
           }
         }
 
@@ -677,6 +680,51 @@ body {
       }
     }
   }
+}
+
+.wikiModal{
+  width:50%;
+  height: 50%;
+  div{
+    width:100%;
+    height: 100%;
+  }
+  iframe{
+    width:100%;
+    height: 100%;
+  }
+}
+
+
+.mapModal {
+  width: 60%;
+  height: 65%;
+
+    #map {
+      width: 100%;
+      height: 96%;
+
+      gmp-map{
+        width: 100%;
+        height: 100%;
+      }
+
+    }
+
+    .wikiModal {
+      width: 50%;
+      height: 60%;
+      position: absolute;
+      z-index: 3;
+      top: 85px;
+      div{
+        width: 100%;
+        height: 97%;
+        iframe {
+          height: 100%;
+        }
+      }
+    }
 }
 
 .devBox {
