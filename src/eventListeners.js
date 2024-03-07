@@ -184,10 +184,9 @@ function setUpListeners() {
 
   vrbl.searchDest.addEventListener('click', () => {
     dom.displayDestinations('city')
+    // vrbl.mapModal.show()
+    vrbl.destModal.showModal()
     secondaryListeners()
-    vrbl.mapModal.show()
-    // vrbl.destModal.showModal()
-    // secondaryListeners()
   })
 
   vrbl.nextButton.addEventListener('click', (e) => {
@@ -242,7 +241,6 @@ function setUpListeners() {
   })
 
   vrbl.closeMap.addEventListener('click', () => {
-    console.log("123")
     vrbl.mapModal.close()
   })
 

@@ -3,6 +3,7 @@ import * as dom from './domUpdate'
 import * as script from './scripts'
 import * as evt from './eventListeners'
 import * as vrbl from './globalVariables'
+import * as api from './apiCalls'
 
 //AIzaSyBtbEun6JAJ82Jw8QoQ8qSIT_4EzDX6gIw
 
@@ -21,41 +22,47 @@ function initMap(destinations) {
        let map = new Map(document.getElementById("map"), {
           center: { lat: 0, lng: 3},
           zoom: 2,
-          gestureHandling: "cooperative" // or "none" if you want to completely disable scrolling
+          gestureHandling: "cooperative" 
         });
       
 
-        // Array of locations (latitude and longitude)
+  
         var locations = destinations
-
         var infoWindow = new google.maps.InfoWindow();
 
-        // Loop through locations and add a marker for each one
         locations.forEach(function(location) {
             var marker = new google.maps.Marker({
                 position: location,
                 map: map
             });
 
-marker.addListener('click', function() {
-        // Construct HTML content for the info window
-        var content = '<div id="infoWindowContent">' +
-                        '<h3>' + location.name + '</h3>' +
-                        '<p>Would you like to book a new trip to</p>' +
-                        '<p>' + location.name + '?</p>' +
-                        '<button id="makeBooking">Yes!</button>' +
-                        '<br>'+
-                        '<br>'+
-                        '<button id="' + location.name + '"class="moreInfo">More Info</button>'
-                      '</div>';
-
-        // Set the content of the info window
-        infoWindow.setContent(content);
-
-        // Open the info window at the marker's position
-        infoWindow.open(map, marker);
-        evt.secondaryListeners()
-    });
+            marker.addListener('click', function() {
+                var content = `<div id="infoWindowContent">
+                                 <h3>${location.name}</h3>
+                                 <p>Would you like to book a new trip to</p>
+                                 <p>${location.name}</p>
+                                 <button class="makeBooking" id="${location.id}">Yes!</button>
+                                 <br>
+                                 <br>
+                                 <button id="${location.name}" class="moreInfo">More Info</button>
+                               </div>`;
+            
+                infoWindow.setContent(content);
+                infoWindow.open(map, marker);
+            
+                google.maps.event.addListenerOnce(infoWindow, 'domready', function() {
+                    var infoWindowContent = document.getElementById('infoWindowContent');
+            
+                    infoWindowContent.addEventListener('click', function(event) {
+                        var target = event.target;
+                        if (target && target.classList.contains('makeBooking')) {
+                            dom.getMapDest(event.target.id)
+                        } else if (target && target.classList.contains('moreInfo')) {
+                            api.wikiSearch(event.target.id)
+                        }
+                    });
+                });
+            });
 
         });
     });
@@ -64,17 +71,17 @@ marker.addListener('click', function() {
 function getDestPins() {
 
 
-// Sample array of destination names
-const destinationNames = script.promiseState.destinations.map((dest) => dest.destination)
 
-// Function to fetch latitude and longitude for a destination name
+const destinationNames = script.promiseState.destinations.map((dest) => {return (`${dest.destination}-${dest.id}`)})
+
 async function fetchLatLng(destinationName) {
+    console.log(destinationName)
     try {
         const response = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(destinationName)}&key=AIzaSyBtbEun6JAJ82Jw8QoQ8qSIT_4EzDX6gIw`);
         const data = await response.json();
         if (data.results.length > 0) {
             const location = data.results[0].geometry.location;
-            return { name: destinationName, lat: location.lat, lng: location.lng };
+            return { name: destinationName.split('-')[0], id: destinationName.split('-')[1], lat: location.lat, lng: location.lng };
         } else {
             console.error(`No results found for destination: ${destinationName}`);
             return null;
@@ -85,7 +92,6 @@ async function fetchLatLng(destinationName) {
     }
 }
 
-// Function to fetch latitude and longitude for all destination names
 async function fetchAllLatLng(destinationNames) {
     const locations = [];
     for (const destinationName of destinationNames) {
@@ -97,7 +103,6 @@ async function fetchAllLatLng(destinationNames) {
     return locations;
 }
 
-// Usage example
 fetchAllLatLng(destinationNames)
     .then(locations => {
         initMap(locations)
