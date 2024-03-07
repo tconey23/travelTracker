@@ -95,6 +95,7 @@
                   <aside>
                      <div>
                         <h3 class="bookTrip">-Book your next trip-</h3>
+                        <h3 class="seeMap">-See destinations-</h3>
                   </aside>
                   <form class="bookingForm">
                   <h3>Traveler Details</h3>
@@ -206,9 +207,23 @@
          </section>
          <section> <img src=""> </section>
       </dialog>
-      <div id='map'></div>
-      <!-- Do not include the scripts.js or class files here - it is done by the webpack server -->
+      <dialog class="mapModal">
+         <button class="closeMap">X</button>
+         <div id='map'>
+            <gmp-map center="40.12150192260742,-100.45039367675781" zoom="4" map-id="DEMO_MAP_ID">
+               <gmp-advanced-marker position="40.12150192260742,-100.45039367675781" title="My location"></gmp-advanced-marker>
+            </gmp-map>
+         </div>
+         <dialog class="wikiModal">
+            <button class="closeModal">X</button>
+            <div id='wiki'>
+               <iframe src=""></iframe>
+            </div>
+         </dialog>
+      </dialog>
+
       <script src="https://cdnjs.cloudflare.com/ajax/libs/date-fns/2.23.0/date_fns.min.js"></script>
+      <!-- <script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBtbEun6JAJ82Jw8QoQ8qSIT_4EzDX6gIw&loading=async&callback=initMap"></script> -->
       <script src="bundle.js"></script>
    </body>
 </html>

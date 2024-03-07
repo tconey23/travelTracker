@@ -1,5 +1,5 @@
 const path = require('path');
-
+const queryString = require('querystring-es3');
 module.exports = {
   "mode": "none",
   "entry": "./src/scripts.js",
@@ -37,5 +37,11 @@ module.exports = {
         ]
       }
     ]
-  }
+  },
+  resolve: {
+    fallback: {
+      "stream": { "stream": require.resolve("stream-browserify") },
+      "querystring": { "querystring": require.resolve("querystring-es3") }
+    }
+  },
 };
