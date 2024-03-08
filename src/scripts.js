@@ -21,7 +21,11 @@ import * as api from "./apiCalls"
   
 getData(['travelers', 'destinations', 'trips'])
 let promiseState
-  
+
+let destinations
+
+destinations = null
+
 promiseState = {
   travelers: null,
   singleTraveler: null,
@@ -81,9 +85,12 @@ function getData(argumentsArray) {
   Promise.all(promises)
     .then(results => {
       updateData(results);
-      correctCountries()
-      gmap.getDestPins()
-  
+      correctCountries() 
+          gmap.getDestPins(promiseState.destinations.map(dest => `${dest.destination}-${dest.id}`)).then(locations => {
+          destinations = locations
+          }).catch(error => {
+          console.error("Error fetching locations:", error);
+          });
     })
     .catch(error => {
       console.error(error);
@@ -184,5 +191,6 @@ export {
   booking,
   postBooking,
   readyToPost,
-  getData
+  getData,
+  destinations
 }

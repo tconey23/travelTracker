@@ -209,7 +209,10 @@
       </dialog>
       <dialog class="mapModal">
          <button class="closeMap">X</button>
-         <div id='map'>
+         <div class="progressBar"><h3>Loading Destinations...</h3>
+            <div class="bar"></div>
+         </div>
+         <div id='map' class="hidden">
             <gmp-map center="40.12150192260742,-100.45039367675781" zoom="4" map-id="DEMO_MAP_ID">
                <gmp-advanced-marker position="40.12150192260742,-100.45039367675781" title="My location"></gmp-advanced-marker>
             </gmp-map>
@@ -223,7 +226,6 @@
       </dialog>
 
       <script src="https://cdnjs.cloudflare.com/ajax/libs/date-fns/2.23.0/date_fns.min.js"></script>
-      <!-- <script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBtbEun6JAJ82Jw8QoQ8qSIT_4EzDX6gIw&loading=async&callback=initMap"></script> -->
       <script src="bundle.js"></script>
    </body>
 </html>
