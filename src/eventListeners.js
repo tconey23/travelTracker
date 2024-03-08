@@ -2,6 +2,7 @@ import * as vrbl from "./globalVariables"
 import * as dom from "./domUpdate"
 import * as script from './scripts'
 import * as api from './apiCalls'
+import * as gmap from './maps'
 const {
   format
 } = require('date-fns')
@@ -231,6 +232,11 @@ function setUpListeners() {
   })
 
   vrbl.mapButton.addEventListener('click', () => {
+    gmap.initMap(script.destinations)
+    vrbl.mapModal.querySelector('#map').classList.add('hidden')
+    vrbl.mapModal.querySelector('.progressBar').classList.remove('hidden')
+    vrbl.mapModal.querySelector('.progressBar').style.opacity = 1
+    vrbl.mapModal.querySelector('.progressBar > .bar').style.width = 0
     secondaryListeners()
     vrbl.mapModal.show()
   })
